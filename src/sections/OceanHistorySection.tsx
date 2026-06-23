@@ -1,11 +1,13 @@
 "use client";
 
+import AnimatedSection from "@/components/AnimatedSection";
+
 export default function OceanHistorySection() {
   return (
-    <section className="relative w-full min-h-screen flex items-center justify-center bg-deep-ocean px-6 py-24 select-none">
+    <section className="relative w-full min-h-screen flex items-center justify-center bg-transparent px-6 py-24 select-none">
       <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         {/* Left Column: Data Context Visual */}
-        <div className="flex justify-center">
+        <AnimatedSection className="flex justify-center">
           <div className="relative w-full max-w-[320px] aspect-square rounded-lg border border-white/5 bg-[#030d14]/40 p-6 flex flex-col justify-between shadow-lg">
             <div className="flex items-center justify-between">
               <span className="font-sans text-[10px] text-sea-foam/40 tracking-widest uppercase">
@@ -29,10 +31,10 @@ export default function OceanHistorySection() {
               </p>
             </div>
           </div>
-        </div>
+        </AnimatedSection>
 
         {/* Right Column: Historical Narrative */}
-        <div className="flex flex-col gap-6">
+        <AnimatedSection delay={200} className="flex flex-col gap-6">
           <span className="font-sans text-[10px] text-soft-cyan uppercase tracking-widest font-semibold">
             Chapter 3 — The Baseline
           </span>
@@ -48,7 +50,7 @@ export default function OceanHistorySection() {
           <p className="font-sans text-sm md:text-base text-sea-foam/70 italic leading-relaxed border-l-2 border-soft-cyan/30 pl-4">
             But the ocean was already beginning to absorb the massive excess heat of a warming planet. The expansion had begun, silently, far out at sea.
           </p>
-        </div>
+        </AnimatedSection>
       </div>
     </section>
   );

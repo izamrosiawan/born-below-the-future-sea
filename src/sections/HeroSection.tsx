@@ -1,13 +1,8 @@
 "use client";
 
-import OceanScene from "@/three/OceanScene";
-
 export default function HeroSection() {
   return (
-    <section className="relative w-full h-screen flex flex-col justify-between items-center text-center px-6 overflow-hidden">
-      {/* 3D Ocean Canvas Background */}
-      <OceanScene />
-
+    <section className="relative w-full h-screen flex flex-col justify-between items-center text-center px-6 overflow-hidden bg-transparent">
       {/* Floating Island Silhouette Accent */}
       <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-deep-ocean to-transparent pointer-events-none z-0" />
 

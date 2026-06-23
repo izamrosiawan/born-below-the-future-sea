@@ -2,6 +2,7 @@
 
 import { ProcessedCountryData } from "@/data/parser";
 import RankingChart from "@/visualizations/RankingChart";
+import AnimatedSection from "@/components/AnimatedSection";
 
 interface RankingSectionProps {
   top5: ProcessedCountryData[];
@@ -10,10 +11,10 @@ interface RankingSectionProps {
 
 export default function RankingSection({ top5, bottom5 }: RankingSectionProps) {
   return (
-    <section className="relative w-full min-h-screen flex items-center justify-center bg-deep-ocean px-6 py-24 select-none border-b border-white/5">
+    <section className="relative w-full min-h-screen flex items-center justify-center bg-transparent px-6 py-24 select-none border-b border-white/5">
       <div className="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         {/* Narrative */}
-        <div className="flex flex-col gap-6">
+        <AnimatedSection className="flex flex-col gap-6">
           <span className="font-sans text-[10px] text-soft-cyan uppercase tracking-widest font-semibold">
             Chapter 5 — Unequal Waters
           </span>
@@ -29,12 +30,12 @@ export default function RankingSection({ top5, bottom5 }: RankingSectionProps) {
           <p className="font-sans text-sm md:text-base text-sea-foam/70 italic leading-relaxed border-l-2 border-soft-cyan/30 pl-4">
             Understanding this disparity is crucial. It means resource allocation, migration planning, and climate adaptation must be tailored, island by island.
           </p>
-        </div>
+        </AnimatedSection>
 
         {/* Dynamic D3 Ranking Chart */}
-        <div className="w-full">
+        <AnimatedSection delay={200} className="w-full">
           <RankingChart top5={top5} bottom5={bottom5} />
-        </div>
+        </AnimatedSection>
       </div>
     </section>
   );
