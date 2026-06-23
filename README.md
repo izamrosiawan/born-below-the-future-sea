@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Born Below the Future Sea 🌊
 
-## Getting Started
+An immersive, storytelling-driven data visualization project created for the **Pacific DataViz Challenge**. This application explores the historical and future impacts of sea-level rise across low-lying Pacific island nations, framing data within a human-centered, generational narrative.
 
-First, run the development server:
+The story follows **Litia**, a child born in Fiji in 2024, tracing how the ocean she grows up with differs from the one her parents inherited in 1993.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## 🌟 Key Features
+
+* **3D Ocean Wave Canvas:** A scroll-driven, customized WebGL/Three.js fragment shader that models wave elevations. The ocean colors dynamically morph to a warm sunset gradient as the user reaches the story's end.
+* **Synthesized Ocean Ambience:** A browser-synthesized audio ambience generator using the **Web Audio API** (modulating Brown Noise using low-pass filters and a 6-second low-frequency oscillator) to mimic realistic coastal wave swells.
+* **Interactive Generation Slider:** A side-by-side coastline comparison tool visualizing a healthy 1993 ecosystem versus a saltwater-inundated 2024 coastline.
+* **Timeline Chronology:** A GSAP-powered, scroll-linked timeline scrubbing satellite altimetry data points from 1993 to 2024.
+* **Frontline Georeference Map:** A stylized, interactive georeferenced map plotting 21 Pacific territories relative to Fiji, showing localized sea-level rise rates proportional to bubble radius.
+* **Gaussian-Smoothed Data Pipeline:** Custom data processor in `parser.ts` executing a Gaussian filter ($\sigma = 1.2$) to eliminate decimal rounding stepping in historical records, generating smooth, high-fidelity lines in D3 charts.
+
+---
+
+## 🛠️ Technology Stack
+
+* **Framework:** Next.js (React 19 & TypeScript)
+* **Styling:** Tailwind CSS v4 & custom HSL color systems
+* **3D Rendering:** Three.js, React Three Fiber (`@react-three/fiber`), and `@react-three/drei`
+* **Data Visualization:** D3.js (interactive line charts, custom gridlines, overlays, and transitions)
+* **Animation & Scrolling:** GSAP (ScrollTrigger) & Lenis (smooth scrolling)
+* **Audio Synthesis:** Web Audio API (client-side brownian noise oscillators)
+
+---
+
+## 📁 Repository Architecture
+
+```text
+src/
+├── app/                  # Next.js app routes, layout, and global theme styles
+├── components/           # Reusable UI widgets & map layers
+│   ├── Map/              # Georeferenced Pacific SVG map node layout
+│   └── AudioToggle.tsx   # Audio ambient controls & synthesizers
+├── data/                 # Raw datasets (CSV) and CSV parsing engines
+├── hooks/                # Intersection Observers and custom hooks
+├── sections/             # Linear storytelling scrollytelling pages
+├── three/                # WebGL scenes, shader materials, and canvas setups
+└── visualizations/       # Custom D3.js chart modules
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🚀 Getting Started
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1. Installation
+Install project dependencies:
+```bash
+npm install
+```
 
-## Learn More
+### 2. Development Server
+Run the development server:
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) on your browser to view the application.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 3. Production Build
+Generate an optimized production build:
+```bash
+npm run build
+```
+Verify page routes and static assets compilation.
