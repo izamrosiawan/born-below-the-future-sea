@@ -14,7 +14,7 @@ export interface ProcessedCountryData {
 }
 
 export function getSeaLevelData() {
-  const filePath = path.join(process.cwd(), 'sea_level.csv');
+  const filePath = path.join(process.cwd(), 'src/data/sea_level.csv');
   const fileContent = fs.readFileSync(filePath, 'utf8');
   
   const lines = fileContent.trim().split('\n');
