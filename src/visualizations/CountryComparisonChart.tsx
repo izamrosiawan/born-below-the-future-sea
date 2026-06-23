@@ -224,6 +224,108 @@ export default function CountryComparisonChart({ data }: CountryComparisonChartP
       .attr("class", "font-sans text-xs font-bold")
       .text("gradual but persistent curve.");
 
+    // -------------------------------------------------------------
+    // INTERACTIVE CROSSHAIR & CURSOR TRACKING (Extremely Premium!)
+    // -------------------------------------------------------------
+    const hoverGroup = svg.append("g").attr("class", "hover-group").style("display", "none");
+    
+    const hoverLine = hoverGroup
+      .append("line")
+      .attr("y1", margin.top)
+      .attr("y2", height - margin.bottom)
+      .attr("stroke", "rgba(245,247,250,0.2)")
+      .attr("stroke-width", 1.5)
+      .attr("stroke-dasharray", "4 4");
+
+    const hoverDotA = hoverGroup
+      .append("circle")
+      .attr("r", 5)
+      .attr("fill", "#00B4D8")
+      .attr("stroke", "#030d14")
+      .attr("stroke-width", 2);
+
+    const hoverDotB = hoverGroup
+      .append("circle")
+      .attr("r", 5)
+      .attr("fill", "#E63946")
+      .attr("stroke", "#030d14")
+      .attr("stroke-width", 2);
+
+    // Multi-country floating tooltip card
+    const tooltip = hoverGroup
+      .append("g")
+      .attr("transform", "translate(0,0)");
+
+    tooltip
+      .append("rect")
+      .attr("width", 140)
+      .attr("height", 68)
+      .attr("rx", 6)
+      .attr("fill", "#030d14")
+      .attr("stroke", "rgba(245,247,250,0.15)")
+      .attr("stroke-width", 1)
+      .style("filter", "drop-shadow(0 4px 12px rgba(0,0,0,0.6))");
+
+    const tooltipYear = tooltip
+      .append("text")
+      .attr("x", 12)
+      .attr("y", 16)
+      .attr("fill", "rgba(245,247,250,0.4)")
+      .attr("class", "font-sans text-[9px] font-bold uppercase tracking-wider");
+
+    const tooltipValA = tooltip
+      .append("text")
+      .attr("x", 12)
+      .attr("y", 36)
+      .attr("fill", "#00B4D8")
+      .attr("class", "font-sans text-xs font-semibold");
+
+    const tooltipValB = tooltip
+      .append("text")
+      .attr("x", 12)
+      .attr("y", 54)
+      .attr("fill", "#E63946")
+      .attr("class", "font-sans text-xs font-semibold");
+
+    const bisect = d3.bisector<{ year: number; value: number }, number>((d) => d.year).center;
+
+    svg
+      .append("rect")
+      .attr("class", "overlay")
+      .attr("width", width - margin.left - margin.right)
+      .attr("height", height - margin.top - margin.bottom)
+      .attr("transform", `translate(${margin.left}, ${margin.top})`)
+      .style("fill", "none")
+      .style("pointer-events", "all")
+      .on("mouseover", () => hoverGroup.style("display", null))
+      .on("mouseout", () => hoverGroup.style("display", "none"))
+      .on("mousemove", (event) => {
+        const mouseX = d3.pointer(event)[0];
+        const yearX = xScale.invert(mouseX);
+        const index = bisect(recordA.data, yearX);
+        
+        const ptA = recordA.data[index];
+        const ptB = recordB.data[index];
+
+        if (ptA && ptB) {
+          const cx = xScale(ptA.year);
+          const cyA = yScale(ptA.value);
+          const cyB = yScale(ptB.value);
+
+          hoverLine.attr("x1", cx).attr("x2", cx);
+          hoverDotA.attr("cx", cx).attr("cy", cyA);
+          hoverDotB.attr("cx", cx).attr("cy", cyB);
+
+          const tooltipX = cx > width / 2 ? cx - 155 : cx + 15;
+          const tooltipY = Math.max(margin.top, Math.min(cyA, cyB) - 15);
+          tooltip.attr("transform", `translate(${tooltipX}, ${tooltipY})`);
+          
+          tooltipYear.text(`Year ${ptA.year}`);
+          tooltipValA.text(`${recordA.country}: +${(ptA.value * 1000).toFixed(0)}mm`);
+          tooltipValB.text(`${recordB.country}: +${(ptB.value * 1000).toFixed(0)}mm`);
+        }
+      });
+
   }, [recordA, recordB, countryA, countryB]);
 
   return (
@@ -231,7 +333,7 @@ export default function CountryComparisonChart({ data }: CountryComparisonChartP
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="font-sans text-[10px] text-soft-cyan uppercase tracking-widest font-semibold">
-            Scientific Record B
+            Scientific Ledger — Dual Country Comparison
           </span>
           <h3 className="font-serif text-2xl font-bold text-sea-foam mt-0.5">
             Island Nation Comparison

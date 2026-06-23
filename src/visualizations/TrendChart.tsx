@@ -146,9 +146,7 @@ export default function TrendChart({ regionalAverage }: TrendChartProps) {
       .attr("stroke-width", 1.5)
       .attr("stroke-dasharray", "3 3");
 
-    // Human-Centered Editorial Annotations (NYT style!)
-    
-    // Annotation 1: El Nino Anomaly
+    // Human-Centered Editorial Annotations
     const elNinoYear = 1998;
     const elNinoVal = regionalAverage.find(d => d.year === elNinoYear)?.value || 0;
     
@@ -185,7 +183,7 @@ export default function TrendChart({ regionalAverage }: TrendChartProps) {
       .attr("class", "font-sans text-[10px] opacity-70")
       .text("causing temporary sea level drop.");
 
-    // Annotation 2: Acceleration Phase
+    // Acceleration Phase
     const accYear = 2016;
     const accVal = regionalAverage.find(d => d.year === accYear)?.value || 0;
 
@@ -222,7 +220,7 @@ export default function TrendChart({ regionalAverage }: TrendChartProps) {
       .attr("class", "font-sans text-[10px] opacity-70")
       .text("due to increased ice sheet melting.");
 
-    // Right-side explanation guide (NYT sidebar style)
+    // Right-side explanation guide
     const sidebar = svg.append("g").attr("transform", `translate(${width - margin.right + 30}, ${margin.top + 30})`);
     
     sidebar.append("text")
@@ -266,19 +264,104 @@ export default function TrendChart({ regionalAverage }: TrendChartProps) {
       .attr("class", "font-sans text-xs font-bold")
       .text("directly into village crops.");
 
+    // -------------------------------------------------------------
+    // INTERACTIVE CROSSHAIR & CURSOR TRACKING (Extremely Premium!)
+    // -------------------------------------------------------------
+    const hoverGroup = svg.append("g").attr("class", "hover-group").style("display", "none");
+    
+    const hoverLine = hoverGroup
+      .append("line")
+      .attr("y1", margin.top)
+      .attr("y2", height - margin.bottom)
+      .attr("stroke", "rgba(76,201,240,0.4)")
+      .attr("stroke-width", 1.5)
+      .attr("stroke-dasharray", "4 4");
+
+    const hoverCircle = hoverGroup
+      .append("circle")
+      .attr("r", 6)
+      .attr("fill", "#4CC9F0")
+      .attr("stroke", "#030d14")
+      .attr("stroke-width", 2);
+
+    // Floating Tooltip Card inside the SVG
+    const tooltip = hoverGroup
+      .append("g")
+      .attr("transform", "translate(0,0)");
+
+    tooltip
+      .append("rect")
+      .attr("width", 120)
+      .attr("height", 50)
+      .attr("rx", 6)
+      .attr("fill", "#030d14")
+      .attr("stroke", "rgba(76,201,240,0.3)")
+      .attr("stroke-width", 1)
+      .style("filter", "drop-shadow(0 4px 8px rgba(0,0,0,0.5))");
+
+    const tooltipYear = tooltip
+      .append("text")
+      .attr("x", 10)
+      .attr("y", 18)
+      .attr("fill", "rgba(245,247,250,0.5)")
+      .attr("class", "font-sans text-[9px] font-bold uppercase tracking-wider");
+
+    const tooltipVal = tooltip
+      .append("text")
+      .attr("x", 10)
+      .attr("y", 38)
+      .attr("fill", "#4CC9F0")
+      .attr("class", "font-serif text-sm font-black");
+
+    // Bisector utility to find closest data year based on mouse X position
+    const bisect = d3.bisector<{ year: number; value: number }, number>((d) => d.year).center;
+
+    svg
+      .append("rect")
+      .attr("class", "overlay")
+      .attr("width", width - margin.left - margin.right)
+      .attr("height", height - margin.top - margin.bottom)
+      .attr("transform", `translate(${margin.left}, ${margin.top})`)
+      .style("fill", "none")
+      .style("pointer-events", "all")
+      .on("mouseover", () => hoverGroup.style("display", null))
+      .on("mouseout", () => hoverGroup.style("display", "none"))
+      .on("mousemove", (event) => {
+        const mouseX = d3.pointer(event)[0];
+        const yearX = xScale.invert(mouseX);
+        const index = bisect(regionalAverage, yearX);
+        const dataPoint = regionalAverage[index];
+
+        if (dataPoint) {
+          const cx = xScale(dataPoint.year);
+          const cy = yScale(dataPoint.value);
+
+          hoverLine.attr("x1", cx).attr("x2", cx);
+          hoverCircle.attr("cx", cx).attr("cy", cy);
+
+          // Positioning tooltip card dynamically to avoid clipping
+          const tooltipX = cx > width / 2 ? cx - 135 : cx + 15;
+          const tooltipY = Math.max(margin.top, cy - 25);
+          tooltip.attr("transform", `translate(${tooltipX}, ${tooltipY})`);
+          
+          tooltipYear.text(`Year ${dataPoint.year}`);
+          tooltipVal.text(`+${(dataPoint.value * 1000).toFixed(0)} mm`);
+        }
+      });
+
   }, [regionalAverage]);
 
   return (
     <div className="w-full bg-[#030d14]/40 backdrop-blur-md rounded-2xl border border-white/5 p-8 shadow-2xl">
       <div className="mb-6">
         <span className="font-sans text-[10px] text-soft-cyan uppercase tracking-widest font-semibold">
-          Scientific Record A
+          Scientific Ledger — Trend Analysis
         </span>
         <h3 className="font-serif text-2xl font-bold text-sea-foam mt-1">
           Pacific Regional Average Trend (1993 - 2024)
         </h3>
         <p className="font-sans text-sm text-sea-foam/60 mt-2 max-w-3xl leading-relaxed">
-          This chart compiles observations across all Pacific islands. Notice that the trend line is not a simple straight line; it accelerates significantly post-2015.
+          Hover over the chart area to inspect the exact millimeter rise recorded for any year.
         </p>
       </div>
       <div className="w-full h-[450px]">
