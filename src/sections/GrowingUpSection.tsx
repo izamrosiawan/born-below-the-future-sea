@@ -20,7 +20,15 @@ export default function GrowingUpSection() {
     }
   };
 
+  const handleMouseDown = (e: MouseEvent) => {
+    handleMove(e.clientX);
+  };
+
   const handleTouchMove = (e: TouchEvent) => {
+    handleMove(e.touches[0].clientX);
+  };
+
+  const handleTouchStart = (e: TouchEvent) => {
     handleMove(e.touches[0].clientX);
   };
 
@@ -44,7 +52,9 @@ export default function GrowingUpSection() {
         {/* Visual Slider Container */}
         <div 
           ref={containerRef}
+          onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
+          onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           className="relative w-full h-[400px] rounded-2xl overflow-hidden border border-white/10 shadow-2xl cursor-ew-resize bg-[#030d14]"
         >

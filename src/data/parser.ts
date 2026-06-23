@@ -43,10 +43,13 @@ export function getSeaLevelData() {
     
     const values = valuesStr.split(',').map(Number);
     
+    // Smooth raw values using Gaussian filter to remove staircase rounding anomalies
+    const smoothedValues = smoothArray(values, 1.2);
+    
     // Process series
     const dataPoints = years.map((year, index) => ({
       year,
-      value: values[index] || 0
+      value: smoothedValues[index] || 0
     }));
 
     // Calculate total rise from 1993 to 2024
@@ -94,4 +97,34 @@ export function getSeaLevelData() {
       regionalAverage: regionalAveragePoints,
     }
   };
+}
+
+function smoothArray(arr: number[], sigma: number = 1.2): number[] {
+  const result: number[] = [];
+  const kernelSize = Math.ceil(sigma * 3);
+  
+  for (let i = 0; i < arr.length; i++) {
+    if (i === 0) {
+      result.push(arr[0]);
+      continue;
+    }
+    if (i === arr.length - 1) {
+      result.push(arr[arr.length - 1]);
+      continue;
+    }
+    
+    let weightedSum = 0;
+    let weightSum = 0;
+    
+    for (let j = -kernelSize; j <= kernelSize; j++) {
+      const idx = i + j;
+      if (idx >= 0 && idx < arr.length) {
+        const weight = Math.exp(-(j * j) / (2 * sigma * sigma));
+        weightedSum += arr[idx] * weight;
+        weightSum += weight;
+      }
+    }
+    result.push(weightedSum / weightSum);
+  }
+  return result;
 }
