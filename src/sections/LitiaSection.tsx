@@ -25,52 +25,33 @@ export default function LitiaSection() {
           </p>
         </AnimatedSection>
 
-        {/* Minimalist Illustration representing Litia & Ocean */}
+        {/* Proper Illustration representing Litia & Ocean */}
         <AnimatedSection delay={200} className="flex justify-center order-1 md:order-2">
-          <div className="relative w-full max-w-[320px] aspect-square rounded-full border border-white/5 bg-[#030d14]/40 p-8 flex items-center justify-center shadow-inner">
-            {/* Ambient Pulse Ring */}
-            <div className="absolute inset-0 rounded-full border border-soft-cyan/10 animate-ping opacity-25" />
-
-            <svg viewBox="0 0 200 200" className="w-full h-full text-soft-cyan">
-              {/* Starry background */}
-              <circle cx="50" cy="40" r="1.5" fill="#F5F7FA" opacity="0.4" />
-              <circle cx="160" cy="50" r="1" fill="#F5F7FA" opacity="0.3" />
-              <circle cx="120" cy="30" r="1.2" fill="#F5F7FA" opacity="0.5" />
-
-              {/* Minimal Wave Silhouettes */}
-              <path
-                d="M 10 140 Q 50 120, 100 140 T 190 140"
-                fill="none"
-                stroke="#00B4D8"
-                strokeWidth="1.5"
-                opacity="0.3"
+          <div className="group relative w-full max-w-[340px] aspect-[4/5] rounded-2xl border border-white/10 bg-gradient-to-b from-[#0a1e2f]/80 to-[#030d14]/90 p-4 flex flex-col justify-between shadow-[0_0_40px_rgba(0,180,216,0.1)] hover:shadow-[0_0_50px_rgba(0,180,216,0.2)] transition-all duration-700 overflow-hidden backdrop-blur-md">
+            {/* Soft Ambient Radial Glow behind the card */}
+            <div className="absolute -inset-px bg-gradient-to-b from-soft-cyan/20 to-transparent rounded-2xl opacity-50 group-hover:opacity-80 transition-opacity duration-700 pointer-events-none" />
+            
+            {/* Image Container */}
+            <div className="relative w-full h-[85%] rounded-xl overflow-hidden border border-white/5 bg-[#030d14]">
+              {/* Ken Burns zoom animation on hover */}
+              <img 
+                src="/litia_illustration.png" 
+                alt="Litia standing on the shores of Fiji" 
+                className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-[5000ms] ease-out"
               />
-              <path
-                d="M 10 150 Q 50 135, 100 150 T 190 150"
-                fill="none"
-                stroke="#4CC9F0"
-                strokeWidth="2.5"
-                opacity="0.6"
-              />
-              <path
-                d="M 10 160 Q 50 148, 100 160 T 190 160"
-                fill="none"
-                stroke="#F5F7FA"
-                strokeWidth="1.5"
-                opacity="0.8"
-              />
+              {/* Deep ocean blue gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#030d14] via-transparent to-transparent opacity-65" />
+            </div>
 
-              {/* Simple island silhouette */}
-              <path
-                d="M 20 142 Q 60 110, 100 142"
-                fill="#0B3D5C"
-                opacity="0.9"
-              />
-
-              {/* Litia Silhouette Symbol (Tiny boat/child icon) */}
-              <circle cx="100" cy="115" r="4" fill="#F5F7FA" />
-              <path d="M 97 122 L 103 122 L 100 119 Z" fill="#F5F7FA" />
-            </svg>
+            {/* Subtle Title and Caption */}
+            <div className="z-10 flex flex-col gap-0.5 px-1 mt-2">
+              <span className="font-serif text-xs font-semibold text-soft-cyan uppercase tracking-widest">
+                Litia
+              </span>
+              <span className="font-sans text-[9px] text-sea-foam/50 uppercase tracking-wider">
+                Fiji Islands, 2024
+              </span>
+            </div>
           </div>
         </AnimatedSection>
       </div>
