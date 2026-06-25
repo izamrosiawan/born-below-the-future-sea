@@ -9,19 +9,19 @@ export default function LitiaSection() {
         {/* Narrative text */}
         <AnimatedSection className="flex flex-col gap-6 order-2 md:order-1">
           <span className="font-sans text-[10px] text-soft-cyan uppercase tracking-widest font-semibold">
-            Chapter 2 — The First Wave
+            01 / HUMAN CONTEXT
           </span>
           <h2 className="font-serif text-3xl md:text-5xl font-bold leading-tight text-sea-foam">
             Meet Litia
           </h2>
           <p className="font-sans text-sm md:text-base text-sea-foam/80 leading-relaxed">
-            In 2024, a baby girl named **Litia** was born in a small coastal village in Fiji. She does not understand climate change. She does not know about global temperature rises, thermal expansion, or polar ice caps melting.
+            In 2024, Litia was born in a coastal village in Fiji. She inherits a shoreline in flux, though she does not yet know about thermal expansion, melting ice sheets, or global greenhouse emissions.
           </p>
           <p className="font-sans text-sm md:text-base text-sea-foam/80 leading-relaxed">
-            To Litia, the ocean is simply a giant, comforting presence just yards from her home. It is where her parents gather food, where her elders tell stories, and where the sound of crashing waves lulls her to sleep every night.
+            To her, the ocean is a constant and familiar presence. It provides food for her family, acts as a backdrop for communal stories, and lulls her to sleep.
           </p>
           <p className="font-sans text-sm md:text-base text-sea-foam/70 italic leading-relaxed border-l-2 border-soft-cyan/30 pl-4">
-            But the ocean Litia was born into is not the same ocean her parents took their first steps in. By the time she grows up, it will be different still.
+            Yet, the waters Litia was born into have already risen significantly since her parents took their first steps on these shores. By the time she reaches adulthood, that change will have accelerated.
           </p>
         </AnimatedSection>
 

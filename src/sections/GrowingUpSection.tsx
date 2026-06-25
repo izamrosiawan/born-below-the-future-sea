@@ -39,13 +39,13 @@ export default function GrowingUpSection() {
         {/* Intro Header */}
         <div className="text-center max-w-2xl mx-auto flex flex-col gap-4">
           <span className="font-sans text-[10px] text-soft-cyan uppercase tracking-widest font-semibold">
-            Chapter 6 — Generational Shift
+            05 / GENERATIONAL SHIFT
           </span>
           <h2 className="font-serif text-3xl md:text-5xl font-bold leading-tight text-sea-foam">
             Growing Up With a Different Ocean
           </h2>
           <p className="font-sans text-xs md:text-sm text-sea-foam/70 leading-relaxed">
-            Drag the divider handle in the interactive visual below to compare the coastlines Litia's parents grew up with (1993) versus what Litia inherits today (2024).
+            Use the slider to compare the Fijian shoreline at the start of the satellite record (1993) with the conditions Litia inherits today (2024).
           </p>
         </div>
 
@@ -71,10 +71,10 @@ export default function GrowingUpSection() {
             </svg>
             
             <div className="z-10 max-w-sm flex flex-col gap-4 select-none">
-              <span className="font-serif text-sm font-semibold text-sea-foam/50 uppercase tracking-widest">Parents (1993)</span>
-              <h3 className="font-serif text-3xl font-bold text-sea-foam">A Generous Shoreline</h3>
+              <span className="font-serif text-sm font-semibold text-sea-foam/50 uppercase tracking-widest">1993 (Baseline)</span>
+              <h3 className="font-serif text-3xl font-bold text-sea-foam">Stable Shorelines</h3>
               <p className="font-sans text-xs text-sea-foam/70 leading-relaxed">
-                Coastal villages enjoyed deep beaches. Coconut palms stood firmly in deep soil, providing shade and stabilizing the shores. Groundwater wells remained untouched by salt.
+                Coastal villages retained deep sandy beaches. Established vegetation stabilized the shorelines, and groundwater wells remained free from saltwater intrusion.
               </p>
               <div className="mt-4">
                 <span className="font-sans text-[9px] text-sea-foam/40 uppercase block">Baseline Level</span>
@@ -99,10 +99,10 @@ export default function GrowingUpSection() {
             </svg>
 
             <div className="z-10 max-w-sm text-right flex flex-col gap-4 items-end select-none">
-              <span className="font-serif text-sm font-semibold text-soft-cyan uppercase tracking-widest">Litia (2024)</span>
-              <h3 className="font-serif text-3xl font-bold text-soft-cyan">The Encroaching Sea</h3>
+              <span className="font-serif text-sm font-semibold text-soft-cyan uppercase tracking-widest">2024 (Today)</span>
+              <h3 className="font-serif text-3xl font-bold text-soft-cyan">Encroaching Tides</h3>
               <p className="font-sans text-xs text-sea-foam/70 leading-relaxed">
-                By 2024, rising waters have reclaimed beach shorelines. Palm roots are submerged in saltwater, causing them to decay and fall. Groundwater has turned brackish and crops are failing.
+                Rising sea levels have eroded sandy shorelines. Coastal vegetation is undermined by saltwater intrusion, turning coastal soils brackish and affecting local crops.
               </p>
               <div className="mt-4">
                 <span className="font-sans text-[9px] text-soft-cyan/40 uppercase block">Sea Rise At Birth</span>

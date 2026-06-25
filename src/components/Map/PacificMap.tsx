@@ -196,7 +196,7 @@ export default function PacificMap({ data }: PacificMapProps) {
             Pacific Frontline
           </h3>
           <p className="font-sans text-xs text-sea-foam/65 leading-relaxed">
-            Every dotted line connects back to **Fiji**, visualizing how these scattered territories share a unified climate threat. Hover over any node to inspect local records.
+            Every dotted line connects back to <strong className="font-semibold text-soft-cyan">Fiji</strong>, illustrating how these scattered islands share a collective sea-level rise threat. Hover over any node to inspect local records.
           </p>
         </div>
 

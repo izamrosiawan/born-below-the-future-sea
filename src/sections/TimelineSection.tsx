@@ -63,10 +63,10 @@ export default function TimelineSection({ data }: TimelineSectionProps) {
           <div className="flex items-center justify-between border-b border-white/10 pb-4">
             <div>
               <span className="font-sans text-[10px] text-soft-cyan uppercase tracking-widest font-semibold">
-                Chapter 4 — The Great Accelerant
+                03 / CHRONOLOGY
               </span>
               <h2 className="font-serif text-3xl md:text-4xl font-bold text-sea-foam mt-1">
-                31 Years of Change
+                Three Decades of Change
               </h2>
             </div>
             {/* Massive modern counter */}
@@ -93,11 +93,11 @@ export default function TimelineSection({ data }: TimelineSectionProps) {
             </span>
             <div className="min-h-[160px] flex flex-col justify-between">
               <p className="font-sans text-sm text-sea-foam/90 leading-relaxed transition-all duration-300">
-                {year === 1993 && "Precision satellite altimetry begins. The Pacific waters sit calm at the 0.0mm reference baseline. A quiet before the shift."}
-                {year > 1993 && year < 2000 && `Anomalies appear. The massive 1997-1998 El Niño triggers a temporary sea level depression in the West Pacific (like Tuvalu plunging to -200mm) before surging back.`}
-                {year >= 2000 && year < 2010 && `Entering the 2000s, global warming accelerates thermal expansion. The rising lines of Samoa and Tonga creep past the 40mm mark.`}
-                {year >= 2010 && year < 2020 && `The trend steepens. Mid-decade, rising sea levels are no longer a future threat—tides regularly inundate low-lying agricultural zones.`}
-                {year >= 2020 && `Fiji reaches a staggering 111.6mm rise. The ocean Litia was born into in 2024 is physically taller, warmer, and more volatile.`}
+                {year === 1993 && "Precision satellite altimetry begins. Pacific sea levels are established at the 0.0 mm reference baseline, initiating a continuous global record."}
+                {year > 1993 && year < 2000 && "Interannual variability becomes evident. The severe 1997-1998 El Niño causes a temporary sea level drawdown in the Western Pacific, followed by a rapid rebound."}
+                {year >= 2000 && year < 2010 && "Global warming accelerates thermal ocean expansion. Decadal averages show Samoa and Tonga exceeding a 40 mm deviation from the 1993 baseline."}
+                {year >= 2010 && year < 2020 && "The rate of sea level rise accelerates. High-tide flooding begins to regularly inundate low-lying coastal agricultural fields and freshwater lenses."}
+                {year >= 2020 && "By 2024, Fiji registers a localized sea level rise of 111.6 mm. The ocean environment is physically higher, warmer, and more volatile than in previous generations."}
               </p>
 
               <div className="border-t border-white/10 pt-4 mt-4 flex items-center justify-between">

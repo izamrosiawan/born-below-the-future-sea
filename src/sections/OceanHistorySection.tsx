@@ -36,19 +36,19 @@ export default function OceanHistorySection() {
         {/* Right Column: Historical Narrative */}
         <AnimatedSection delay={200} className="flex flex-col gap-6">
           <span className="font-sans text-[10px] text-soft-cyan uppercase tracking-widest font-semibold">
-            Chapter 3 — The Baseline
+            02 / THE BASELINE
           </span>
           <h2 className="font-serif text-3xl md:text-5xl font-bold leading-tight text-sea-foam">
-            Before She Was Born
+            The 1993 Baseline
           </h2>
           <p className="font-sans text-sm md:text-base text-sea-foam/80 leading-relaxed">
-            In 1993, thirty-one years before Litia took her first breath, the international community launched satellites to start measuring the height of the world's oceans with millimeter accuracy. 
+            In 1993, high-precision satellite altimetry began recording global sea levels, establishing a baseline of zero deviation.
           </p>
           <p className="font-sans text-sm md:text-base text-sea-foam/80 leading-relaxed">
-            At that time, the waters surrounding Fiji, Samoa, and Tuvalu were considered the baseline. That year was recorded as **0.0 mm** deviation. The islands stood as they had for generations, with shorelines that felt permanent.
+            For generations, the shorelines of Fiji, Samoa, and Tuvalu had remained relatively stable, with seasonal tides shaping familiar coastlines.
           </p>
           <p className="font-sans text-sm md:text-base text-sea-foam/70 italic leading-relaxed border-l-2 border-soft-cyan/30 pl-4">
-            But the ocean was already beginning to absorb the massive excess heat of a warming planet. The expansion had begun, silently, far out at sea.
+            But beneath the surface, a thermodynamic shift was underway. The oceans were already absorbing over 90% of the excess heat trapped by greenhouse gas emissions, initiating a continuous thermal expansion.
           </p>
         </AnimatedSection>
       </div>

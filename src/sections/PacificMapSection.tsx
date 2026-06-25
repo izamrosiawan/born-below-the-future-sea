@@ -16,13 +16,13 @@ export default function PacificMapSection({ data }: PacificMapSectionProps) {
         {/* Header */}
         <AnimatedSection className="flex flex-col gap-2 max-w-2xl">
           <span className="font-sans text-[10px] text-soft-cyan uppercase tracking-widest font-semibold">
-            Chapter 7 — Geographic Footprint
+            06 / GEOGRAPHIC FOOTPRINT
           </span>
           <h2 className="font-serif text-3xl md:text-5xl font-bold leading-tight text-sea-foam">
             The Pacific Frontline
           </h2>
           <p className="font-sans text-xs md:text-sm text-sea-foam/70 leading-relaxed">
-            The Pacific Ocean is home to thousands of islands, separated by vast distances but united by the rising water. Hover over any nation below to inspect the localized trends.
+            Though separated by vast expanses of ocean, the nations of Oceania are collectively vulnerable to changing sea levels. Hover over any nation on the map to inspect localized historical trends.
           </p>
         </AnimatedSection>
 

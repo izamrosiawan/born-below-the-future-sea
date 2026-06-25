@@ -68,13 +68,13 @@ export default function ReflectionSection() {
       >
         <div className="text-center max-w-xl flex flex-col gap-2">
           <span className="font-sans text-[10px] text-soft-cyan uppercase tracking-widest font-semibold">
-            Chapter 8 — The Decision
+            08 / THE DECISION
           </span>
           <h3 className="font-serif text-xl md:text-2xl font-bold text-soft-cyan">
-            Dilema Litia: Masa Depan yang Menanti (2050)
+            Litia's Dilemma: An Unavoidable Future (2050)
           </h3>
           <p className="font-sans text-xs md:text-sm text-sea-foam/70 leading-relaxed">
-            Ketika Litia menginjak usia 26 tahun, permukaan air laut di Fiji diperkirakan naik lebih dari 200 mm. Komunitas pesisirnya dihadapkan pada pilihan yang memilukan. Klik di bawah untuk melihat konsekuensinya.
+            By 2050, when Litia turns 26, local sea levels in Fiji are projected to rise by more than 200 mm. Her coastal community faces a stark, painful decision. Select a path below to explore the consequences.
           </p>
         </div>
 
@@ -89,10 +89,10 @@ export default function ReflectionSection() {
                 : "border-white/15 bg-[#030d14]/40 hover:border-white/25 hover:bg-[#030d14]/60"
             }`}
           >
-            <span className="font-serif text-[10px] font-semibold text-soft-cyan uppercase tracking-widest mb-2">Pilihan A</span>
-            <h4 className="font-serif text-base font-bold text-sea-foam mb-2">Relokasi (Pindah)</h4>
+            <span className="font-serif text-[10px] font-semibold text-soft-cyan uppercase tracking-widest mb-2">Option A</span>
+            <h4 className="font-serif text-base font-bold text-sea-foam mb-2">Relocation</h4>
             <p className="font-sans text-xs text-sea-foam/70 leading-relaxed">
-              Meninggalkan Fiji untuk mencari tempat tinggal baru di Selandia Baru atau Australia sebagai migran iklim demi keselamatan fisik.
+              Displacing from Fiji to seek residency in New Zealand or Australia as climate migrants, securing physical safety.
             </p>
           </button>
 
@@ -105,10 +105,10 @@ export default function ReflectionSection() {
                 : "border-white/15 bg-[#030d14]/40 hover:border-white/25 hover:bg-[#030d14]/60"
             }`}
           >
-            <span className="font-serif text-[10px] font-semibold text-soft-cyan uppercase tracking-widest mb-2">Pilihan B</span>
-            <h4 className="font-serif text-base font-bold text-sea-foam mb-2">Adaptasi (Menetap)</h4>
+            <span className="font-serif text-[10px] font-semibold text-soft-cyan uppercase tracking-widest mb-2">Option B</span>
+            <h4 className="font-serif text-base font-bold text-sea-foam mb-2">Adaptation</h4>
             <p className="font-sans text-xs text-sea-foam/70 leading-relaxed">
-              Bertahan di tanah leluhur, membangun tanggul laut, menanam hutan bakau, dan berjuang menjaga budaya tetap hidup.
+              Remaining on ancestral land, building sea walls, planting mangrove buffers, and adapting to a volatile shoreline.
             </p>
           </button>
         </div>
@@ -118,10 +118,10 @@ export default function ReflectionSection() {
           {selectedChoice === "relocate" && (
             <div className="p-6 rounded-2xl border border-white/5 bg-[#030d14]/60 backdrop-blur-md flex flex-col gap-2 text-left transition-all duration-500">
               <span className="font-serif text-xs font-semibold text-soft-cyan uppercase tracking-wider">
-                "Kehilangan Tanah, Menyelamatkan Masa Depan"
+                "Losing the Land, Securing Survival"
               </span>
               <p className="font-sans text-xs md:text-sm text-sea-foam/80 leading-relaxed">
-                Litia dan keluarganya terpaksa mengemas sisa hidup mereka ke dalam koper dan berpindah ke negara asing. Fisik mereka aman di dataran tinggi, tetapi hubungan spiritual mereka dengan tanah leluhur (*Vanua*) terputus selamanya. Kuburan nenek moyang mereka tenggelam di bawah laut Fiji, dan identitas budaya mereka perlahan terkikis di tanah perantauan.
+                Litia and her family pack their lives into suitcases and migrate to a foreign nation. While they are physically safe on higher ground, their spiritual connection to the *Vanua* (ancestral land) is severed. The graves of their ancestors are permanently submerged, and their cultural traditions slowly fade as they assimilate into a new society.
               </p>
             </div>
           )}
@@ -129,10 +129,10 @@ export default function ReflectionSection() {
           {selectedChoice === "stay" && (
             <div className="p-6 rounded-2xl border border-white/5 bg-[#030d14]/60 backdrop-blur-md flex flex-col gap-2 text-left transition-all duration-500">
               <span className="font-serif text-xs font-semibold text-soft-cyan uppercase tracking-wider">
-                "Berakar di Tengah Pasang"
+                "Rooted in the Rising Tide"
               </span>
               <p className="font-sans text-xs md:text-sm text-sea-foam/80 leading-relaxed">
-                Litia memilih untuk tidak pergi. Bersama desanya, ia bergotong-royong meninggikan rumah mereka di atas tiang kayu, menanam ribuan bibit bakau untuk menahan abrasi, dan mempertahankan desa. Hubungan sosial, bahasa, dan ritual adat mereka tetap hidup. Namun, setiap badai datang mereka harus bertaruh nyawa, dan sumur air tawar mereka semakin asin untuk diminum.
+                Litia chooses to stay. Alongside her village, she helps raise homes on wooden stilts, plant mangrove buffers to slow erosion, and fortify the shoreline. Their language, customs, and community bonds remain intact. However, they remain highly vulnerable to intense cyclonic storms, and their freshwater wells grow increasingly brackish.
               </p>
             </div>
           )}
@@ -140,7 +140,7 @@ export default function ReflectionSection() {
           {selectedChoice === "none" && (
             <div className="flex items-center justify-center p-8 border border-white/10 border-dashed rounded-2xl bg-[#030d14]/25 h-[120px]">
               <p className="font-sans text-xs md:text-sm text-sea-foam/40 italic">
-                Pilih salah satu opsi di atas untuk melihat konsekuensi nasib Litia...
+                Select a path above to explore the consequences of Litia's future...
               </p>
             </div>
           )}
@@ -153,13 +153,13 @@ export default function ReflectionSection() {
           }`}
         >
           <h4 className="font-serif text-base md:text-lg font-bold text-soft-cyan">
-            Konklusi: Menetap dan Berjuang
+            Conclusion: The Choice to Fight
           </h4>
           <p className="font-sans text-xs md:text-sm text-sea-foam/80 leading-relaxed">
-            Bagi masyarakat adat Fiji, memisahkan diri dari tanah adalah bentuk kematian identitas. Oleh karena itu, mayoritas masyarakat pesisir memilih untuk <strong>menetap, beradaptasi, dan berjuang</strong>. Mereka menolak dipandang sebagai korban yang pasrah; mereka adalah pejuang iklim di garis depan.
+            For indigenous Pacific Islanders, separating from their land is a form of cultural erasure. Consequently, many coastal communities choose to stay, adapt, and defend their homes. They do not view themselves as passive victims of a changing climate; they are active guardians on the front lines of resilience.
           </p>
           <div className="font-sans text-xs text-soft-cyan/90 italic leading-relaxed max-w-lg border-l-2 border-soft-cyan/30 pl-4 text-left mt-2 bg-[#030d14]/30 py-2 pr-2 rounded-r-lg">
-            "Kami tidak tenggelam, kami sedang berjuang. Namun, ketangguhan kami tidak boleh dijadikan alasan bagi dunia untuk terus menunda aksi penyelamatan bumi."
+            "We are not drowning, we are fighting. But our resilience must not be used as an excuse for global inaction."
           </div>
         </div>
       </div>
@@ -175,16 +175,16 @@ export default function ReflectionSection() {
             Project Credits
           </span>
           <p className="font-serif text-sm text-sea-foam font-bold">
-            Pacific DataViz Challenge — Built for the Future of Oceania
+            Pacific DataViz Challenge: Built for the Future of Oceania
           </p>
           <p className="font-sans text-[11px] text-sea-foam/60 leading-relaxed max-w-md">
-            Dibuat oleh <strong className="text-soft-cyan font-semibold">Kelompok Pacific Guardians</strong> sebagai bentuk visualisasi data interaktif untuk advokasi iklim global.
+            Developed by <strong className="text-soft-cyan font-semibold">Team Pacific Guardians</strong> as an interactive data visualization platform for global climate advocacy.
           </p>
         </div>
 
         <div className="flex flex-col items-center md:items-end gap-2 shrink-0">
           <span className="font-sans text-[9px] text-sea-foam/40 uppercase tracking-wider">
-            Sumber Data Resmi
+            Official Data Source
           </span>
           <a
             href="https://pacificdata.org"
@@ -192,7 +192,7 @@ export default function ReflectionSection() {
             rel="noopener noreferrer"
             className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-soft-cyan/20 bg-soft-cyan/5 hover:bg-soft-cyan/15 hover:border-soft-cyan/40 text-soft-cyan hover:text-white text-[11px] font-bold tracking-widest uppercase transition-all duration-300 shadow-[0_0_15px_rgba(0,180,216,0.03)] hover:shadow-[0_0_20px_rgba(0,180,216,0.15)] backdrop-blur-sm"
           >
-            <span>Buka Pacific Data Hub</span>
+            <span>Open Pacific Data Hub</span>
             <svg
               className="w-3.5 h-3.5 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
               fill="none"
@@ -212,4 +212,3 @@ export default function ReflectionSection() {
     </section>
   );
 }
-
