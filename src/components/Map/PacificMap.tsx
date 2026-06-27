@@ -198,6 +198,35 @@ export default function PacificMap({
             </radialGradient>
           </defs>
 
+          {/* Stylized Geographical Landmass Outlines (Under the Grid) */}
+          <g fill="none" stroke="rgba(245,247,250,0.12)" strokeWidth="1.2" className="pointer-events-none">
+            {/* Australia (Bottom Left) */}
+            <path 
+              d="M -20 280 Q 30 290, 50 270 T 90 280 Q 110 250, 130 270 T 150 320 Q 180 350, 190 380 T 160 420 L -20 420 Z" 
+              fill="rgba(245,247,250,0.02)" 
+              stroke="rgba(245,247,250,0.08)"
+            />
+            {/* Papua New Guinea (Main Island) */}
+            <path 
+              d="M 95 185 Q 120 175, 140 180 T 170 190 T 195 192 T 215 200 Q 200 205, 185 202 T 155 200 T 120 195 T 95 190 Z" 
+              fill="rgba(245,247,250,0.02)"
+              stroke="rgba(245,247,250,0.08)"
+            />
+            {/* New Zealand (North & South Islands - Bottom) */}
+            <path d="M 440 375 L 475 395" stroke="rgba(245,247,250,0.12)" strokeWidth="2.5" strokeLinecap="round" />
+            <path d="M 470 350 Q 480 360, 485 375" stroke="rgba(245,247,250,0.12)" strokeWidth="2.0" strokeLinecap="round" />
+            {/* New Caledonia */}
+            <path d="M 290 280 L 320 295" stroke="rgba(245,247,250,0.15)" strokeWidth="2.0" strokeLinecap="round" />
+            {/* Solomon Islands chain */}
+            <path d="M 230 180 L 250 190" stroke="rgba(245,247,250,0.12)" strokeWidth="1.5" strokeLinecap="round" />
+            <path d="M 255 195 L 275 205" stroke="rgba(245,247,250,0.12)" strokeWidth="1.5" strokeLinecap="round" />
+            {/* Vanuatu chain */}
+            <path d="M 330 220 L 340 235 L 345 250" stroke="rgba(245,247,250,0.12)" strokeWidth="1.5" strokeLinecap="round" />
+            {/* Fiji land shapes under the main nodes */}
+            <path d="M 422 238 A 3 2 0 1 1 428 238 Z" fill="rgba(245,247,250,0.2)" />
+            <path d="M 432 233 A 2 1.5 0 1 1 436 233 Z" fill="rgba(245,247,250,0.2)" />
+          </g>
+
           {/* Centralized ambient glow */}
           <circle cx={fijiCoords.cx} cy={fijiCoords.cy} r="260" fill="url(#oceanGlow)" />
 
