@@ -89,8 +89,47 @@ export default function RankingChart({ top5, bottom5, view }: RankingChartProps)
       .attr("rx", 4)
       .attr("width", 0);
 
-    // UPDATE + ENTER transition
-    barsEnter.merge(bars as any)
+    const mergedBars = barsEnter.merge(bars as any);
+    
+    mergedBars
+      .style("cursor", "pointer")
+      .on("mouseover", function (event, d: any) {
+        svg.select(".bars-container").selectAll("rect").transition().duration(200).style("opacity", 0.3);
+        d3.select(this).transition().duration(200).style("opacity", 1.0);
+        
+        svg.select(".labels-container").selectAll("text").transition().duration(200).style("opacity", 0.2);
+        svg.select(".labels-container").selectAll("text")
+          .filter((t: any) => t.country === d.country)
+          .transition()
+          .duration(200)
+          .style("opacity", 1.0)
+          .style("fill", "#4CC9F0");
+          
+        svg.select(".values-container").selectAll("text").transition().duration(200).style("opacity", 0.2);
+        svg.select(".values-container").selectAll("text")
+          .filter((t: any) => t.country === d.country)
+          .transition()
+          .duration(200)
+          .style("opacity", 1.0)
+          .style("fill", "#F5F7FA");
+      })
+      .on("mouseout", function () {
+        svg.select(".bars-container").selectAll("rect").transition().duration(200).style("opacity", 1.0);
+        
+        svg.select(".labels-container").selectAll("text")
+          .transition()
+          .duration(200)
+          .style("opacity", 0.8)
+          .style("fill", "#F5F7FA");
+          
+        svg.select(".values-container").selectAll("text")
+          .transition()
+          .duration(200)
+          .style("opacity", 1.0)
+          .style("fill", "#4CC9F0");
+      });
+
+    mergedBars
       .transition()
       .duration(500)
       .ease(d3.easeCubicOut)

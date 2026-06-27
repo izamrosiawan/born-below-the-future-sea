@@ -31,7 +31,8 @@ export default function InteractiveApp({ raw, derived }: InteractiveAppProps) {
   const [selectedCountryB, setSelectedCountryB] = useState<string>("Tuvalu");
   const [projectionYear, setProjectionYear] = useState<number>(2024);
   const [projectionScenario, setProjectionScenario] = useState<"low" | "high">("low");
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [isPlaying, setIsPlaying] = useState<boolean>(true);
+  const [sliderTimeout, setSliderTimeout] = useState<NodeJS.Timeout | null>(null);
 
   // Simulation playback loop
   useEffect(() => {
@@ -40,7 +41,6 @@ export default function InteractiveApp({ raw, derived }: InteractiveAppProps) {
       timer = setInterval(() => {
         setProjectionYear((prev) => {
           if (prev >= 2100) {
-            setIsPlaying(false);
             return 1993; // loop back to baseline
           }
           return prev + 1;
@@ -51,6 +51,17 @@ export default function InteractiveApp({ raw, derived }: InteractiveAppProps) {
       if (timer) clearInterval(timer);
     };
   }, [isPlaying]);
+
+  const handleSliderChange = (year: number) => {
+    setIsPlaying(false);
+    setProjectionYear(year);
+    if (sliderTimeout) clearTimeout(sliderTimeout);
+    
+    const timeout = setTimeout(() => {
+      setIsPlaying(true);
+    }, 1500);
+    setSliderTimeout(timeout);
+  };
 
   return (
     <main className="relative w-full text-sea-foam overflow-hidden">
@@ -80,11 +91,9 @@ export default function InteractiveApp({ raw, derived }: InteractiveAppProps) {
         selectedCountryB={selectedCountryB}
         setSelectedCountryB={setSelectedCountryB}
         projectionYear={projectionYear}
-        setProjectionYear={setProjectionYear}
+        setProjectionYear={handleSliderChange}
         projectionScenario={projectionScenario}
         setProjectionScenario={setProjectionScenario}
-        isPlaying={isPlaying}
-        setIsPlaying={setIsPlaying}
       />
       
       <AnalyticsSection 

@@ -25,6 +25,18 @@ export default function TimelineSection({ data }: TimelineSectionProps) {
     "American Samoa",
   ];
 
+  const [activeCountries, setActiveCountries] = useState<string[]>(countries);
+
+  const toggleCountry = (country: string) => {
+    setActiveCountries((prev) => {
+      if (prev.includes(country)) {
+        if (prev.length === 1) return prev; // keep at least one
+        return prev.filter((c) => c !== country);
+      }
+      return [...prev, country];
+    });
+  };
+
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
@@ -81,7 +93,8 @@ export default function TimelineSection({ data }: TimelineSectionProps) {
           <TimelineChart
             data={data}
             currentYear={year}
-            selectedCountries={countries}
+            selectedCountries={activeCountries}
+            onToggleCountry={toggleCountry}
           />
         </div>
 
