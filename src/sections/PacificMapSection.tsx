@@ -6,29 +6,149 @@ import AnimatedSection from "@/components/AnimatedSection";
 
 interface PacificMapSectionProps {
   data: ProcessedCountryData[];
+  selectedCountryA: string;
+  setSelectedCountryA: (c: string) => void;
+  selectedCountryB: string;
+  setSelectedCountryB: (c: string) => void;
+  projectionYear: number;
+  setProjectionYear: (y: number) => void;
+  projectionScenario: "low" | "high";
+  setProjectionScenario: (s: "low" | "high") => void;
+  isPlaying: boolean;
+  setIsPlaying: (p: boolean) => void;
 }
 
-export default function PacificMapSection({ data }: PacificMapSectionProps) {
+export default function PacificMapSection({
+  data,
+  selectedCountryA,
+  setSelectedCountryA,
+  selectedCountryB,
+  setSelectedCountryB,
+  projectionYear,
+  setProjectionYear,
+  projectionScenario,
+  setProjectionScenario,
+  isPlaying,
+  setIsPlaying,
+}: PacificMapSectionProps) {
   return (
     <section className="relative w-full min-h-screen flex items-center justify-center bg-transparent px-6 py-24 select-none border-b border-white/5">
-      <div className="max-w-5xl w-full flex flex-col gap-10">
+      <div className="max-w-5xl w-full flex flex-col gap-8">
         
-        {/* Header */}
-        <AnimatedSection className="flex flex-col gap-2 max-w-2xl">
-          <span className="font-sans text-[10px] text-soft-cyan uppercase tracking-widest font-semibold">
-            06 / GEOGRAPHIC FOOTPRINT
-          </span>
-          <h2 className="font-serif text-3xl md:text-5xl font-bold leading-tight text-sea-foam">
-            The Pacific Frontline
-          </h2>
-          <p className="font-sans text-xs md:text-sm text-sea-foam/70 leading-relaxed">
-            Though separated by vast expanses of ocean, the nations of Oceania are collectively vulnerable to changing sea levels. Hover over any nation on the map to inspect localized historical trends.
-          </p>
+        {/* Header and Scenario Selector */}
+        <AnimatedSection className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+          <div className="md:col-span-8 flex flex-col gap-2">
+            <span className="font-sans text-[10px] text-soft-cyan uppercase tracking-widest font-semibold">
+              06 / GEOGRAPHIC FOOTPRINT & PROJECTIONS
+            </span>
+            <h2 className="font-serif text-3xl md:text-5xl font-bold leading-tight text-sea-foam">
+              The Pacific Frontline
+            </h2>
+            <p className="font-sans text-xs md:text-sm text-sea-foam/70 leading-relaxed">
+              The nations of Oceania share a collective vulnerability to rising seas. Adjust the year and emission scenario to project the future of these islands. Click on any island circle on the map to select it for comparison.
+            </p>
+          </div>
+          
+          {/* Scenario Selector Panel */}
+          <div className="md:col-span-4 flex flex-col gap-2 bg-[#030d14]/75 border border-white/10 p-4 rounded-xl backdrop-blur-md">
+            <span className="font-sans text-[9px] text-soft-cyan uppercase tracking-widest font-bold">Emissions Scenario</span>
+            <div className="grid grid-cols-2 gap-2 mt-1">
+              <button
+                onClick={() => setProjectionScenario("low")}
+                className={`px-3 py-1.5 rounded-lg font-sans text-[10px] font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                  projectionScenario === "low"
+                    ? "bg-ocean-blue text-sea-foam border border-soft-cyan/30"
+                    : "bg-[#020b12] text-sea-foam/50 border border-white/5 hover:text-sea-foam"
+                }`}
+              >
+                SSP1-2.6 (Low)
+              </button>
+              <button
+                onClick={() => setProjectionScenario("high")}
+                className={`px-3 py-1.5 rounded-lg font-sans text-[10px] font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                  projectionScenario === "high"
+                    ? "bg-ocean-blue text-sea-foam border border-soft-cyan/30"
+                    : "bg-[#020b12] text-sea-foam/50 border border-white/5 hover:text-sea-foam"
+                }`}
+              >
+                SSP5-8.5 (High)
+              </button>
+            </div>
+          </div>
+        </AnimatedSection>
+
+        {/* Year Slider Panel */}
+        <AnimatedSection delay={100} className="w-full bg-[#030d14]/50 border border-white/10 p-6 rounded-2xl backdrop-blur-md flex flex-col gap-4 shadow-2xl relative overflow-hidden">
+          {/* Faint blue linear progress accent at the top */}
+          <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-soft-cyan via-[#00B4D8] to-transparent opacity-65" />
+          
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+              <span className="font-sans text-[9px] text-[#4CC9F0] uppercase tracking-widest font-bold">Climate Simulation Controller</span>
+              <h3 className="font-serif text-lg font-bold text-sea-foam mt-0.5">Interactive Projection Timeline</h3>
+            </div>
+            
+            <div className="flex items-center gap-4 bg-[#020b12] border border-white/5 rounded-xl px-4 py-2">
+              <span className="font-sans text-[9px] text-sea-foam/40 uppercase tracking-widest">Year</span>
+              <span className="font-serif text-3xl font-black text-soft-cyan tracking-tight leading-none w-[72px] text-center">{projectionYear}</span>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-4 mt-2">
+            {/* Play/Pause Button */}
+            <button
+              onClick={() => setIsPlaying(!isPlaying)}
+              className="flex items-center justify-center w-12 h-12 rounded-xl bg-soft-cyan/15 hover:bg-soft-cyan/25 border border-soft-cyan/35 text-soft-cyan hover:scale-105 active:scale-95 transition-all duration-300 shadow-[0_0_15px_rgba(0,180,216,0.1)] cursor-pointer shrink-0"
+              title={isPlaying ? "Pause Simulation" : "Play Simulation"}
+            >
+              {isPlaying ? (
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                  <rect x="6" y="4" width="4" height="16" rx="1" />
+                  <rect x="14" y="4" width="4" height="16" rx="1" />
+                </svg>
+              ) : (
+                <svg className="w-4 h-4 translate-x-0.5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              )}
+            </button>
+            
+            {/* Interactive Timeline Bar */}
+            <div className="flex-1 flex flex-col gap-2 relative">
+              <div className="relative w-full flex items-center">
+                <input
+                  type="range"
+                  min="1993"
+                  max="2100"
+                  value={projectionYear}
+                  onChange={(e) => {
+                    setIsPlaying(false);
+                    setProjectionYear(Number(e.target.value));
+                  }}
+                  className="w-full h-2 bg-[#020b12] rounded-lg appearance-none cursor-pointer accent-soft-cyan focus:outline-none border border-white/5"
+                />
+              </div>
+              <div className="flex justify-between text-[8px] text-sea-foam/40 uppercase font-sans tracking-wider mt-1 px-1">
+                <button className={`hover:text-soft-cyan transition-colors cursor-pointer ${projectionYear === 1993 ? "text-soft-cyan font-bold" : ""}`} onClick={() => { setIsPlaying(false); setProjectionYear(1993); }}>1993 (Base)</button>
+                <button className={`hover:text-soft-cyan transition-colors cursor-pointer ${projectionYear === 2024 ? "text-soft-cyan font-bold" : ""}`} onClick={() => { setIsPlaying(false); setProjectionYear(2024); }}>2024 (Present)</button>
+                <button className={`hover:text-soft-cyan transition-colors cursor-pointer ${projectionYear === 2050 ? "text-soft-cyan font-bold" : ""}`} onClick={() => { setIsPlaying(false); setProjectionYear(2050); }}>2050 (Projected)</button>
+                <button className={`hover:text-soft-cyan transition-colors cursor-pointer ${projectionYear === 2100 ? "text-soft-cyan font-bold" : ""}`} onClick={() => { setIsPlaying(false); setProjectionYear(2100); }}>2100 (Cent. End)</button>
+              </div>
+            </div>
+          </div>
         </AnimatedSection>
 
         {/* Map visualization component */}
         <AnimatedSection delay={200} className="w-full">
-          <PacificMap data={data} />
+          <PacificMap 
+            data={data}
+            selectedCountryA={selectedCountryA}
+            setSelectedCountryA={setSelectedCountryA}
+            selectedCountryB={selectedCountryB}
+            setSelectedCountryB={setSelectedCountryB}
+            projectionYear={projectionYear}
+            projectionScenario={projectionScenario}
+          />
         </AnimatedSection>
 
       </div>

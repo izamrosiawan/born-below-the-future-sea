@@ -1,44 +1,91 @@
 "use client";
 
-import { useRef, useEffect, useState, useMemo } from "react";
+import { useRef, useEffect, useMemo } from "react";
 import * as d3 from "d3";
 import { ProcessedCountryData } from "@/data/parser";
 
 interface CountryComparisonChartProps {
   data: ProcessedCountryData[];
+  selectedCountryA: string;
+  setSelectedCountryA: (c: string) => void;
+  selectedCountryB: string;
+  setSelectedCountryB: (c: string) => void;
+  projectionYear: number;
+  projectionScenario: "low" | "high";
 }
 
-export default function CountryComparisonChart({ data }: CountryComparisonChartProps) {
-  const svgRef = useRef<SVGSVGElement>(null);
-  const [countryA, setCountryA] = useState<string>("Fiji");
-  const [countryB, setCountryB] = useState<string>("Tuvalu");
+function getProjectedDataset(countryData: ProcessedCountryData, scenario: "low" | "high") {
+  const dataset = countryData.data.map(d => ({ ...d })); // copy historical
+  
+  // Future projection
+  const val2024 = countryData.data.find((d) => d.year === 2024)?.value || countryData.totalRise;
+  const rate = countryData.averageRate; // m/year
+  const acceleration = 0.0001; 
 
-  const recordA = useMemo(() => data.find((c) => c.country === countryA), [data, countryA]);
-  const recordB = useMemo(() => data.find((c) => c.country === countryB), [data, countryB]);
+  for (let year = 2025; year <= 2100; year++) {
+    const t = year - 2024;
+    let projectedVal = 0;
+    if (scenario === "low") {
+      projectedVal = val2024 + rate * t;
+    } else {
+      projectedVal = val2024 + rate * t + 0.5 * acceleration * t * t;
+    }
+    dataset.push({ year, value: projectedVal });
+  }
+  
+  return dataset;
+}
+
+export default function CountryComparisonChart({
+  data,
+  selectedCountryA,
+  setSelectedCountryA,
+  selectedCountryB,
+  setSelectedCountryB,
+  projectionYear,
+  projectionScenario,
+}: CountryComparisonChartProps) {
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  const recordA = useMemo(() => data.find((c) => c.country === selectedCountryA), [data, selectedCountryA]);
+  const recordB = useMemo(() => data.find((c) => c.country === selectedCountryB), [data, selectedCountryB]);
+
+  const datasetA = useMemo(() => {
+    if (!recordA) return [];
+    return getProjectedDataset(recordA, projectionScenario);
+  }, [recordA, projectionScenario]);
+
+  const datasetB = useMemo(() => {
+    if (!recordB) return [];
+    return getProjectedDataset(recordB, projectionScenario);
+  }, [recordB, projectionScenario]);
+
+  // Layout metrics
+  const width = 1000;
+  const height = 450;
+  const margin = { top: 50, right: 240, bottom: 60, left: 60 };
 
   useEffect(() => {
-    if (!svgRef.current || !recordA || !recordB) return;
-
-    const width = 1000;
-    const height = 450;
-    const margin = { top: 50, right: 240, bottom: 60, left: 60 };
+    if (!svgRef.current || !recordA || !recordB || datasetA.length === 0 || datasetB.length === 0) return;
 
     const svg = d3.select(svgRef.current);
     svg.selectAll("*").remove();
 
     svg.attr("viewBox", `0 0 ${width} ${height}`).attr("width", "100%").attr("height", "100%");
 
+    // Scale X up to 2100 for projections
     const xScale = d3
       .scaleLinear()
-      .domain([1993, 2024])
+      .domain([1993, 2100])
       .range([margin.left, width - margin.right]);
 
-    const maxVal = d3.max([...recordA.data, ...recordB.data], (d) => d.value) || 0.15;
-    const minVal = d3.min([...recordA.data, ...recordB.data], (d) => d.value) || -0.22;
+    // Compute max/min from full projected datasets
+    const maxVal = d3.max([...datasetA, ...datasetB], (d) => d.value) || 0.6;
+    const minVal = d3.min([...datasetA, ...datasetB], (d) => d.value) || -0.22;
 
     const yScale = d3
       .scaleLinear()
-      .domain([minVal - 0.02, maxVal + 0.02])
+      .domain([minVal - 0.03, maxVal + 0.03])
       .range([height - margin.bottom, margin.top]);
 
     // Glow filters
@@ -84,7 +131,7 @@ export default function CountryComparisonChart({ data }: CountryComparisonChartP
 
     // Axes
     const xAxis = d3.axisBottom(xScale).ticks(10).tickFormat(d3.format("d"));
-    const yAxis = d3.axisLeft(yScale).ticks(5).tickFormat((d) => `${(Number(d) * 1000).toFixed(0)}mm`);
+    const yAxis = d3.axisLeft(yScale).ticks(5).tickFormat((d) => `${(Number(d) * 1000).toFixed(0)} mm`);
 
     svg
       .append("g")
@@ -109,26 +156,59 @@ export default function CountryComparisonChart({ data }: CountryComparisonChartP
       .y((d) => yScale(d.value))
       .curve(d3.curveMonotoneX);
 
-    // Draw Country A Line (Cyan)
+    // Split historical vs projected
+    const histA = datasetA.filter(d => d.year <= 2024);
+    const projA = datasetA.filter(d => d.year >= 2024);
+
+    const histB = datasetB.filter(d => d.year <= 2024);
+    const projB = datasetB.filter(d => d.year >= 2024);
+
+    // 1. Draw Country A Lines (Cyan)
+    // Historical (Solid)
     svg
       .append("path")
-      .datum(recordA.data)
+      .datum(histA)
       .attr("fill", "none")
       .attr("stroke", "#00B4D8")
       .attr("stroke-width", 3)
       .attr("filter", "url(#glow-A)")
       .attr("opacity", 0.95)
       .attr("d", lineGen);
-
-    // Draw Country B Line (Red/Coral)
+    
+    // Projected (Dashed)
     svg
       .append("path")
-      .datum(recordB.data)
+      .datum(projA)
+      .attr("fill", "none")
+      .attr("stroke", "#00B4D8")
+      .attr("stroke-width", 2)
+      .attr("stroke-dasharray", "4 4")
+      .attr("filter", "url(#glow-A)")
+      .attr("opacity", 0.7)
+      .attr("d", lineGen);
+
+    // 2. Draw Country B Lines (Red)
+    // Historical (Solid)
+    svg
+      .append("path")
+      .datum(histB)
       .attr("fill", "none")
       .attr("stroke", "#E63946")
       .attr("stroke-width", 3)
       .attr("filter", "url(#glow-B)")
       .attr("opacity", 0.95)
+      .attr("d", lineGen);
+    
+    // Projected (Dashed)
+    svg
+      .append("path")
+      .datum(projB)
+      .attr("fill", "none")
+      .attr("stroke", "#E63946")
+      .attr("stroke-width", 2)
+      .attr("stroke-dasharray", "4 4")
+      .attr("filter", "url(#glow-B)")
+      .attr("opacity", 0.7)
       .attr("d", lineGen);
 
     // Baseline indicator
@@ -142,45 +222,49 @@ export default function CountryComparisonChart({ data }: CountryComparisonChartP
       .attr("stroke-width", 1.5)
       .attr("stroke-dasharray", "3 3");
 
-    // Dynamic Annotation detailing El Nino spike if Tuvalu is active
-    if (countryA === "Tuvalu" || countryB === "Tuvalu") {
-      const targetColor = countryA === "Tuvalu" ? "#00B4D8" : "#E63946";
-      
-      svg
-        .append("circle")
-        .attr("cx", xScale(1998))
-        .attr("cy", yScale(-0.2))
-        .attr("r", 5)
-        .attr("fill", targetColor);
+    // Divider for 2024 projection start
+    svg
+      .append("line")
+      .attr("x1", xScale(2024))
+      .attr("y1", margin.top)
+      .attr("x2", xScale(2024))
+      .attr("y2", height - margin.bottom)
+      .attr("stroke", "rgba(245,247,250,0.2)")
+      .attr("stroke-width", 1)
+      .attr("stroke-dasharray", "1 4");
 
-      svg
-        .append("line")
-        .attr("x1", xScale(1998))
-        .attr("y1", yScale(-0.2))
-        .attr("x2", xScale(1998) + 60)
-        .attr("y2", yScale(-0.2) + 60)
-        .attr("stroke", targetColor)
-        .attr("stroke-width", 1.5)
-        .attr("stroke-dasharray", "2 2");
+    svg
+      .append("text")
+      .attr("x", xScale(2024) - 8)
+      .attr("y", margin.top - 8)
+      .attr("fill", "rgba(245,247,250,0.3)")
+      .attr("text-anchor", "end")
+      .attr("class", "font-sans text-[8px] uppercase tracking-widest font-bold")
+      .text("Historical");
 
-      const label = svg.append("g").attr("transform", `translate(${xScale(1998) + 70}, ${yScale(-0.2) + 50})`);
-      label.append("text")
-        .attr("fill", targetColor)
-        .attr("class", "font-sans text-[11px] font-bold uppercase tracking-wider")
-        .text("Tuvalu Extreme Low");
-      label.append("text")
-        .attr("fill", "#F5F7FA")
-        .attr("dy", "12")
-        .attr("class", "font-sans text-[10px] opacity-70")
-        .text("Temporary -200mm dip caused by trade winds");
-      label.append("text")
-        .attr("fill", "#F5F7FA")
-        .attr("dy", "24")
-        .attr("class", "font-sans text-[10px] opacity-70")
-        .text("shifting hot water away from the island.");
-    }
+    svg
+      .append("text")
+      .attr("x", xScale(2024) + 8)
+      .attr("y", margin.top - 8)
+      .attr("fill", "rgba(76,201,240,0.4)")
+      .attr("text-anchor", "start")
+      .attr("class", "font-sans text-[8px] uppercase tracking-widest font-bold")
+      .text("Projections");
 
-    // Right-side comparison sidebar
+    // Dynamic vertical timeline indicator reflecting projectionYear
+    svg
+      .append("line")
+      .attr("class", "projection-indicator-line")
+      .attr("x1", xScale(projectionYear))
+      .attr("y1", margin.top)
+      .attr("x2", xScale(projectionYear))
+      .attr("y2", height - margin.bottom)
+      .attr("stroke", "#4CC9F0")
+      .attr("stroke-width", 1.5)
+      .attr("stroke-dasharray", "2 2")
+      .attr("opacity", 0.55);
+
+    // Sidebar text explanation
     const sidebar = svg.append("g").attr("transform", `translate(${width - margin.right + 30}, ${margin.top + 30})`);
     
     sidebar.append("text")
@@ -210,22 +294,22 @@ export default function CountryComparisonChart({ data }: CountryComparisonChartP
       .attr("fill", "#F5F7FA")
       .attr("dy", "82")
       .attr("class", "font-sans text-xs opacity-70")
-      .text("Tuvalu has frequent spike events,");
+      .text("One island may show frequent spikes,");
 
     sidebar.append("text")
       .attr("fill", "#F5F7FA")
       .attr("dy", "98")
       .attr("class", "font-sans text-xs opacity-70")
-      .text(`while ${recordA.country} follows a more`);
+      .text("while another follows a more");
 
     sidebar.append("text")
       .attr("fill", "#00B4D8")
       .attr("dy", "114")
       .attr("class", "font-sans text-xs font-bold")
-      .text("gradual but persistent curve.");
+      .text("gradual and persistent curve.");
 
     // -------------------------------------------------------------
-    // INTERACTIVE CROSSHAIR & CURSOR TRACKING (Extremely Premium!)
+    // INTERACTIVE CROSSHAIR & CURSOR TRACKING (Tooltip)
     // -------------------------------------------------------------
     const hoverGroup = svg.append("g").attr("class", "hover-group").style("display", "none");
     
@@ -302,10 +386,10 @@ export default function CountryComparisonChart({ data }: CountryComparisonChartP
       .on("mousemove", (event) => {
         const mouseX = d3.pointer(event)[0];
         const yearX = xScale.invert(mouseX);
-        const index = bisect(recordA.data, yearX);
+        const index = bisect(datasetA, yearX);
         
-        const ptA = recordA.data[index];
-        const ptB = recordB.data[index];
+        const ptA = datasetA[index];
+        const ptB = datasetB[index];
 
         if (ptA && ptB) {
           const cx = xScale(ptA.year);
@@ -320,13 +404,26 @@ export default function CountryComparisonChart({ data }: CountryComparisonChartP
           const tooltipY = Math.max(margin.top, Math.min(cyA, cyB) - 15);
           tooltip.attr("transform", `translate(${tooltipX}, ${tooltipY})`);
           
-          tooltipYear.text(`Year ${ptA.year}`);
-          tooltipValA.text(`${recordA.country}: +${(ptA.value * 1000).toFixed(0)}mm`);
-          tooltipValB.text(`${recordB.country}: +${(ptB.value * 1000).toFixed(0)}mm`);
+          tooltipYear.text(ptA.year > 2024 ? `Projected Year ${ptA.year}` : `Year ${ptA.year}`);
+          tooltipValA.text(`${recordA.country}: +${(ptA.value * 1000).toFixed(0)} mm`);
+          tooltipValB.text(`${recordB.country}: +${(ptB.value * 1000).toFixed(0)} mm`);
         }
       });
 
-  }, [recordA, recordB, countryA, countryB]);
+  }, [recordA, recordB, datasetA, datasetB, projectionYear, projectionScenario]);
+
+  // Read year values directly for comparison values
+  const activeValA = useMemo(() => {
+    if (!recordA) return 0;
+    const pt = datasetA.find(d => d.year === projectionYear);
+    return pt ? pt.value : 0;
+  }, [recordA, datasetA, projectionYear]);
+
+  const activeValB = useMemo(() => {
+    if (!recordB) return 0;
+    const pt = datasetB.find(d => d.year === projectionYear);
+    return pt ? pt.value : 0;
+  }, [recordB, datasetB, projectionYear]);
 
   return (
     <div className="w-full bg-[#030d14]/40 backdrop-blur-md rounded-2xl border border-white/5 p-8 shadow-2xl flex flex-col gap-6">
@@ -346,12 +443,12 @@ export default function CountryComparisonChart({ data }: CountryComparisonChartP
           <div className="flex flex-col gap-1">
             <span className="font-sans text-[9px] text-[#00B4D8] uppercase tracking-wider font-bold">Country A</span>
             <select
-              value={countryA}
-              onChange={(e) => setCountryA(e.target.value)}
+              value={selectedCountryA}
+              onChange={(e) => setSelectedCountryA(e.target.value)}
               className="bg-[#030d14]/80 text-sea-foam text-xs border border-white/10 rounded-lg px-3 py-1.5 outline-none focus:border-soft-cyan/50 focus:ring-1 focus:ring-soft-cyan/30 cursor-pointer"
             >
               {data.map((c) => (
-                <option key={c.country} value={c.country} disabled={c.country === countryB}>
+                <option key={c.country} value={c.country} disabled={c.country === selectedCountryB}>
                   {c.country}
                 </option>
               ))}
@@ -360,12 +457,12 @@ export default function CountryComparisonChart({ data }: CountryComparisonChartP
           <div className="flex flex-col gap-1">
             <span className="font-sans text-[9px] text-[#E63946] uppercase tracking-wider font-bold">Country B</span>
             <select
-              value={countryB}
-              onChange={(e) => setCountryB(e.target.value)}
+              value={selectedCountryB}
+              onChange={(e) => setSelectedCountryB(e.target.value)}
               className="bg-[#030d14]/80 text-sea-foam text-xs border border-white/10 rounded-lg px-3 py-1.5 outline-none focus:border-soft-cyan/50 focus:ring-1 focus:ring-soft-cyan/30 cursor-pointer"
             >
               {data.map((c) => (
-                <option key={c.country} value={c.country} disabled={c.country === countryA}>
+                <option key={c.country} value={c.country} disabled={c.country === selectedCountryA}>
                   {c.country}
                 </option>
               ))}
@@ -382,9 +479,11 @@ export default function CountryComparisonChart({ data }: CountryComparisonChartP
       <div className="grid grid-cols-2 gap-8 border-t border-white/5 pt-4">
         {recordA && (
           <div className="flex flex-col border-l-2 border-[#00B4D8] pl-4">
-            <span className="font-sans text-[10px] text-sea-foam/50 uppercase tracking-widest font-semibold">{recordA.country} Net Rise</span>
+            <span className="font-sans text-[10px] text-sea-foam/50 uppercase tracking-widest font-semibold">
+              {recordA.country} {projectionYear > 2024 ? `Projected Rise (${projectionYear})` : "Net Rise"}
+            </span>
             <span className="font-serif text-3xl font-black text-sea-foam mt-1">
-              +{(recordA.totalRise * 1000).toFixed(0)}mm
+              +{Math.max(0, activeValA * 1000).toFixed(0)} mm
             </span>
             <span className="font-sans text-xs text-sea-foam/60 mt-1">
               Average rate: {(recordA.averageRate * 1000).toFixed(2)} mm / year
@@ -393,9 +492,11 @@ export default function CountryComparisonChart({ data }: CountryComparisonChartP
         )}
         {recordB && (
           <div className="flex flex-col border-l-2 border-[#E63946] pl-4">
-            <span className="font-sans text-[10px] text-sea-foam/50 uppercase tracking-widest font-semibold">{recordB.country} Net Rise</span>
+            <span className="font-sans text-[10px] text-sea-foam/50 uppercase tracking-widest font-semibold">
+              {recordB.country} {projectionYear > 2024 ? `Projected Rise (${projectionYear})` : "Net Rise"}
+            </span>
             <span className="font-serif text-3xl font-black text-sea-foam mt-1">
-              +{(recordB.totalRise * 1000).toFixed(0)}mm
+              +{Math.max(0, activeValB * 1000).toFixed(0)} mm
             </span>
             <span className="font-sans text-xs text-sea-foam/60 mt-1">
               Average rate: {(recordB.averageRate * 1000).toFixed(2)} mm / year

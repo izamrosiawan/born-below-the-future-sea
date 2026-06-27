@@ -74,7 +74,7 @@ export default function ReflectionSection() {
             Litia's Dilemma: An Unavoidable Future (2050)
           </h3>
           <p className="font-sans text-xs md:text-sm text-sea-foam/70 leading-relaxed">
-            By 2050, when Litia turns 26, local sea levels in Fiji are projected to rise by more than 200 mm. Her coastal community faces a stark, painful decision. Select a path below to explore the consequences.
+            By 2050, when Litia is 26, local sea levels in Fiji are projected to rise by more than 200 mm. Her village will face a stark, painful choice. Select a path below to explore the options.
           </p>
         </div>
 
@@ -92,7 +92,7 @@ export default function ReflectionSection() {
             <span className="font-serif text-[10px] font-semibold text-soft-cyan uppercase tracking-widest mb-2">Option A</span>
             <h4 className="font-serif text-base font-bold text-sea-foam mb-2">Relocation</h4>
             <p className="font-sans text-xs text-sea-foam/70 leading-relaxed">
-              Displacing from Fiji to seek residency in New Zealand or Australia as climate migrants, securing physical safety.
+              Leaving Fiji to seek residency in New Zealand or Australia, securing physical safety at the cost of parting from ancestral land.
             </p>
           </button>
 
@@ -108,7 +108,7 @@ export default function ReflectionSection() {
             <span className="font-serif text-[10px] font-semibold text-soft-cyan uppercase tracking-widest mb-2">Option B</span>
             <h4 className="font-serif text-base font-bold text-sea-foam mb-2">Adaptation</h4>
             <p className="font-sans text-xs text-sea-foam/70 leading-relaxed">
-              Remaining on ancestral land, building sea walls, planting mangrove buffers, and adapting to a volatile shoreline.
+              Remaining on ancestral land, building sea walls, planting mangrove buffers, and adapting to an increasingly volatile shoreline.
             </p>
           </button>
         </div>
@@ -121,7 +121,7 @@ export default function ReflectionSection() {
                 "Losing the Land, Securing Survival"
               </span>
               <p className="font-sans text-xs md:text-sm text-sea-foam/80 leading-relaxed">
-                Litia and her family pack their lives into suitcases and migrate to a foreign nation. While they are physically safe on higher ground, their spiritual connection to the *Vanua* (ancestral land) is severed. The graves of their ancestors are permanently submerged, and their cultural traditions slowly fade as they assimilate into a new society.
+                Litia and her family pack their lives into suitcases and migrate. While they are physically safe on higher ground, their spiritual connection to the <span className="italic text-soft-cyan">Vanua</span> (ancestral land) is severed. The graves of their ancestors are lost to the tides, and their cultural traditions risk fading as they adapt to a new society.
               </p>
             </div>
           )}
@@ -132,7 +132,7 @@ export default function ReflectionSection() {
                 "Rooted in the Rising Tide"
               </span>
               <p className="font-sans text-xs md:text-sm text-sea-foam/80 leading-relaxed">
-                Litia chooses to stay. Alongside her village, she helps raise homes on wooden stilts, plant mangrove buffers to slow erosion, and fortify the shoreline. Their language, customs, and community bonds remain intact. However, they remain highly vulnerable to intense cyclonic storms, and their freshwater wells grow increasingly brackish.
+                Litia chooses to stay. Alongside her community, she helps raise homes on wooden stilts, plant mangrove buffers, and fortify the shoreline. Their language, customs, and community bonds remain intact. Yet, they remain vulnerable to severe cyclones, and their freshwater wells grow increasingly brackish.
               </p>
             </div>
           )}
@@ -146,6 +146,83 @@ export default function ReflectionSection() {
           )}
         </div>
 
+        {/* Impact Metrics Panel */}
+        <div className="w-full max-w-3xl bg-[#030d14]/40 border border-white/5 rounded-2xl p-6 backdrop-blur-md flex flex-col gap-4 mt-2">
+          <span className="font-sans text-[9px] text-soft-cyan uppercase tracking-widest font-semibold text-left">
+            Future Community Impact Assessment (2050)
+          </span>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {/* Metric 1: Physical Safety */}
+            <div className="flex flex-col gap-1.5 text-left">
+              <div className="flex justify-between text-xs font-semibold text-sea-foam/90">
+                <span>Physical Safety</span>
+                <span className={selectedChoice === "relocate" ? "text-emerald-400" : selectedChoice === "stay" ? "text-rose-400" : "text-soft-cyan"}>
+                  {selectedChoice === "relocate" ? "95%" : selectedChoice === "stay" ? "35%" : "50%"}
+                </span>
+              </div>
+              <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                <div 
+                  className={`h-full rounded-full transition-all duration-700 ${
+                    selectedChoice === "relocate" ? "bg-emerald-400 shadow-[0_0_8px_#34d399]" : selectedChoice === "stay" ? "bg-rose-400" : "bg-soft-cyan"
+                  }`}
+                  style={{ width: selectedChoice === "relocate" ? "95%" : selectedChoice === "stay" ? "35%" : "50%" }}
+                />
+              </div>
+              <span className="text-[9px] text-sea-foam/40 mt-1 leading-normal">
+                {selectedChoice === "relocate" && "Protected from extreme storm surges."}
+                {selectedChoice === "stay" && "High vulnerability to extreme storms."}
+                {selectedChoice === "none" && "Assessing safety of current villages."}
+              </span>
+            </div>
+
+            {/* Metric 2: Cultural Heritage */}
+            <div className="flex flex-col gap-1.5 text-left">
+              <div className="flex justify-between text-xs font-semibold text-sea-foam/90">
+                <span>Cultural Heritage</span>
+                <span className={selectedChoice === "stay" ? "text-emerald-400" : selectedChoice === "relocate" ? "text-rose-400" : "text-soft-cyan"}>
+                  {selectedChoice === "relocate" ? "15%" : selectedChoice === "stay" ? "95%" : "85%"}
+                </span>
+              </div>
+              <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                <div 
+                  className={`h-full rounded-full transition-all duration-700 ${
+                    selectedChoice === "stay" ? "bg-emerald-400 shadow-[0_0_8px_#34d399]" : selectedChoice === "relocate" ? "bg-rose-400" : "bg-soft-cyan"
+                  }`}
+                  style={{ width: selectedChoice === "relocate" ? "15%" : selectedChoice === "stay" ? "95%" : "85%" }}
+                />
+              </div>
+              <span className="text-[9px] text-sea-foam/40 mt-1 leading-normal">
+                {selectedChoice === "relocate" && "Cultural severing from ancestral land."}
+                {selectedChoice === "stay" && "Ancestral customs and bonds preserved."}
+                {selectedChoice === "none" && "Deep spiritual connection to the Vanua."}
+              </span>
+            </div>
+
+            {/* Metric 3: Economic Viability */}
+            <div className="flex flex-col gap-1.5 text-left">
+              <div className="flex justify-between text-xs font-semibold text-sea-foam/90">
+                <span>Economic Viability</span>
+                <span className={selectedChoice === "relocate" ? "text-emerald-400" : selectedChoice === "stay" ? "text-rose-400" : "text-soft-cyan"}>
+                  {selectedChoice === "relocate" ? "60%" : selectedChoice === "stay" ? "30%" : "50%"}
+                </span>
+              </div>
+              <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                <div 
+                  className={`h-full rounded-full transition-all duration-700 ${
+                    selectedChoice === "relocate" ? "bg-emerald-400" : selectedChoice === "stay" ? "bg-rose-400" : "bg-soft-cyan"
+                  }`}
+                  style={{ width: selectedChoice === "relocate" ? "60%" : selectedChoice === "stay" ? "30%" : "50%" }}
+                />
+              </div>
+              <span className="text-[9px] text-sea-foam/40 mt-1 leading-normal">
+                {selectedChoice === "relocate" && "Relocation costs offset by employment."}
+                {selectedChoice === "stay" && "Enormous costs to rebuild seawalls."}
+                {selectedChoice === "none" && "Subsistence economy linked to ocean."}
+              </span>
+            </div>
+          </div>
+        </div>
+
         {/* Final Resolution (fades in once a choice is clicked) */}
         <div
           className={`w-full max-w-2xl text-center flex flex-col items-center gap-4 border-t border-white/10 pt-8 mt-4 transition-all duration-700 ${
@@ -156,7 +233,7 @@ export default function ReflectionSection() {
             Conclusion: The Choice to Fight
           </h4>
           <p className="font-sans text-xs md:text-sm text-sea-foam/80 leading-relaxed">
-            For indigenous Pacific Islanders, separating from their land is a form of cultural erasure. Consequently, many coastal communities choose to stay, adapt, and defend their homes. They do not view themselves as passive victims of a changing climate; they are active guardians on the front lines of resilience.
+            For indigenous Pacific Islanders, separating from their land is a form of cultural erasure. Many coastal communities choose to stay and defend their homes. They do not see themselves as passive victims of climate change, but as active guardians on the front lines of global resilience.
           </p>
           <div className="font-sans text-xs text-soft-cyan/90 italic leading-relaxed max-w-lg border-l-2 border-soft-cyan/30 pl-4 text-left mt-2 bg-[#030d14]/30 py-2 pr-2 rounded-r-lg">
             "We are not drowning, we are fighting. But our resilience must not be used as an excuse for global inaction."

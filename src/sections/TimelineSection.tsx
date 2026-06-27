@@ -93,11 +93,11 @@ export default function TimelineSection({ data }: TimelineSectionProps) {
             </span>
             <div className="min-h-[160px] flex flex-col justify-between">
               <p className="font-sans text-sm text-sea-foam/90 leading-relaxed transition-all duration-300">
-                {year === 1993 && "Precision satellite altimetry begins. Pacific sea levels are established at the 0.0 mm reference baseline, initiating a continuous global record."}
-                {year > 1993 && year < 2000 && "Interannual variability becomes evident. The severe 1997-1998 El Niño causes a temporary sea level drawdown in the Western Pacific, followed by a rapid rebound."}
-                {year >= 2000 && year < 2010 && "Global warming accelerates thermal ocean expansion. Decadal averages show Samoa and Tonga exceeding a 40 mm deviation from the 1993 baseline."}
-                {year >= 2010 && year < 2020 && "The rate of sea level rise accelerates. High-tide flooding begins to regularly inundate low-lying coastal agricultural fields and freshwater lenses."}
-                {year >= 2020 && "By 2024, Fiji registers a localized sea level rise of 111.6 mm. The ocean environment is physically higher, warmer, and more volatile than in previous generations."}
+                {year === 1993 && "Precision satellite altimetry begins, establishing a 0.0 mm reference baseline to launch a continuous global record of sea-level change."}
+                {year > 1993 && year < 2000 && "Natural climate cycles show their influence. The severe 1997-1998 El Niño causes a temporary drop in Western Pacific sea levels, followed by a rapid rebound."}
+                {year >= 2000 && year < 2010 && "Rising temperatures drive ocean thermal expansion. By the end of the decade, sea levels around Samoa and Tonga rise more than 40 mm above the baseline."}
+                {year >= 2010 && year < 2020 && "The pace of sea-level rise quickens. High-tide flooding begins to regularly submerge coastal farmland and threaten vital freshwater lenses."}
+                {year >= 2020 && "By 2024, Fiji registers a localized rise of 111.6 mm. The surrounding ocean is now visibly higher, warmer, and more volatile than the sea known by previous generations."}
               </p>
 
               <div className="border-t border-white/10 pt-4 mt-4 flex items-center justify-between">

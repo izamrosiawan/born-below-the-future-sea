@@ -1,6 +1,6 @@
 "use client";
 
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useRef, useMemo, useEffect } from "react";
 import * as THREE from "three";
 
@@ -182,6 +182,63 @@ function SeaParticles({ count = 350 }) {
   );
 }
 
+function CameraRig() {
+  const { camera, scene } = useThree();
+  
+  useFrame(() => {
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+    
+    let targetY = 4.0;
+    let targetZ = 16.0;
+    let targetX = 0.0;
+    let targetFov = 42;
+    
+    if (progress < 0.2) {
+      const t = progress / 0.2;
+      targetY = THREE.MathUtils.lerp(4.0, 2.5, t);
+      targetZ = THREE.MathUtils.lerp(16.0, 14.0, t);
+    } else if (progress >= 0.2 && progress < 0.85) {
+      const t = (progress - 0.2) / 0.65;
+      targetY = THREE.MathUtils.lerp(2.5, 4.5, t);
+      targetZ = THREE.MathUtils.lerp(14.0, 16.0, t);
+    } else {
+      const t = (progress - 0.85) / 0.15;
+      // Sink camera under the waves (waves are at y = -2.5)
+      targetY = THREE.MathUtils.lerp(4.5, -4.2, t);
+      targetZ = THREE.MathUtils.lerp(16.0, 10.0, t);
+      targetX = THREE.MathUtils.lerp(0.0, 1.5, t);
+      targetFov = THREE.MathUtils.lerp(42, 60, t);
+    }
+    
+    camera.position.x = THREE.MathUtils.lerp(camera.position.x, targetX, 0.05);
+    camera.position.y = THREE.MathUtils.lerp(camera.position.y, targetY, 0.05);
+    camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, 0.05);
+    if (camera instanceof THREE.PerspectiveCamera) {
+      camera.fov = THREE.MathUtils.lerp(camera.fov, targetFov, 0.05);
+      camera.updateProjectionMatrix();
+    }
+    
+    const fog = scene.fog;
+    if (fog && fog instanceof THREE.Fog) {
+      if (progress > 0.85) {
+        const t = (progress - 0.85) / 0.15;
+        fog.color.set(new THREE.Color().lerpColors(new THREE.Color("#061826"), new THREE.Color("#140b03"), t));
+        fog.near = THREE.MathUtils.lerp(12, 1, t);
+        fog.far = THREE.MathUtils.lerp(28, 12, t);
+      } else {
+        fog.color.set(new THREE.Color("#061826"));
+        fog.near = 12;
+        fog.far = 28;
+      }
+    }
+    
+    camera.lookAt(0, -2.5, 0);
+  });
+  
+  return null;
+}
+
 // React component wrapping the canvas
 export default function OceanScene() {
   return (
@@ -194,6 +251,7 @@ export default function OceanScene() {
         <directionalLight position={[5, 10, 5]} color="#4CC9F0" intensity={0.9} />
         <pointLight position={[-12, 6, -12]} color="#00B4D8" intensity={0.6} />
         <fog attach="fog" args={["#061826", 12, 28]} />
+        <CameraRig />
         <WaveMesh />
         <SeaParticles count={350} />
       </Canvas>

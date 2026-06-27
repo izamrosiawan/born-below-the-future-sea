@@ -7,6 +7,7 @@ export default function AudioToggle() {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioCtxRef = useRef<AudioContext | null>(null);
   const gainNodeRef = useRef<GainNode | null>(null);
+  const filterRef = useRef<BiquadFilterNode | null>(null);
   const lfoRef = useRef<OscillatorNode | null>(null);
 
   const startAudio = () => {
@@ -36,7 +37,8 @@ export default function AudioToggle() {
       // 2. Filter to make it sound like a deep ocean wash
       const filter = ctx.createBiquadFilter();
       filter.type = "lowpass";
-      filter.frequency.value = 400; // Deep cutoff
+      filter.frequency.value = 350; // Deep cutoff
+      filterRef.current = filter;
 
       // 3. Modulate gain (rhythmic swell of waves)
       const gainNode = ctx.createGain();
@@ -86,7 +88,41 @@ export default function AudioToggle() {
   };
 
   useEffect(() => {
+    const handleScroll = () => {
+      if (!audioCtxRef.current || audioCtxRef.current.state !== "running") return;
+      
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+      
+      let targetFreq = 350;
+      let targetGain = 0.08;
+      
+      if (progress < 0.2) {
+        const t = progress / 0.2;
+        targetFreq = 350 + t * 50; // 350 -> 400 Hz
+        targetGain = 0.08 + t * 0.02; // 0.08 -> 0.10
+      } else if (progress >= 0.2 && progress < 0.85) {
+        const t = (progress - 0.2) / 0.65;
+        targetFreq = 400 + t * 100; // 400 -> 500 Hz
+        targetGain = 0.10 + t * 0.04; // 0.10 -> 0.14
+      } else {
+        const t = (progress - 0.85) / 0.15;
+        targetFreq = 500 - t * 380; // 500 -> 120 Hz (muffled underwater rumble)
+        targetGain = 0.14 - t * 0.09; // 0.14 -> 0.05
+      }
+      
+      const now = audioCtxRef.current.currentTime;
+      if (filterRef.current) {
+        filterRef.current.frequency.setTargetAtTime(targetFreq, now, 0.15);
+      }
+      if (gainNodeRef.current) {
+        gainNodeRef.current.gain.setTargetAtTime(targetGain, now, 0.15);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
+      window.removeEventListener("scroll", handleScroll);
       if (audioCtxRef.current) {
         audioCtxRef.current.close();
       }

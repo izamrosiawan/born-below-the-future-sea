@@ -45,7 +45,7 @@ export default function GrowingUpSection() {
             Growing Up With a Different Ocean
           </h2>
           <p className="font-sans text-xs md:text-sm text-sea-foam/70 leading-relaxed">
-            Use the slider to compare the Fijian shoreline at the start of the satellite record (1993) with the conditions Litia inherits today (2024).
+            Use the slider to compare the Fijian shoreline at the start of the satellite record (1993) with the conditions Litia faces today (2024).
           </p>
         </div>
 
@@ -74,7 +74,7 @@ export default function GrowingUpSection() {
               <span className="font-serif text-sm font-semibold text-sea-foam/50 uppercase tracking-widest">1993 (Baseline)</span>
               <h3 className="font-serif text-3xl font-bold text-sea-foam">Stable Shorelines</h3>
               <p className="font-sans text-xs text-sea-foam/70 leading-relaxed">
-                Coastal villages retained deep sandy beaches. Established vegetation stabilized the shorelines, and groundwater wells remained free from saltwater intrusion.
+                Coastal villages enjoyed wide, sandy beaches. Healthy coastal vegetation stabilized the soil, and groundwater wells remained clean and free from saltwater.
               </p>
               <div className="mt-4">
                 <span className="font-sans text-[9px] text-sea-foam/40 uppercase block">Baseline Level</span>
@@ -102,7 +102,7 @@ export default function GrowingUpSection() {
               <span className="font-serif text-sm font-semibold text-soft-cyan uppercase tracking-widest">2024 (Today)</span>
               <h3 className="font-serif text-3xl font-bold text-soft-cyan">Encroaching Tides</h3>
               <p className="font-sans text-xs text-sea-foam/70 leading-relaxed">
-                Rising sea levels have eroded sandy shorelines. Coastal vegetation is undermined by saltwater intrusion, turning coastal soils brackish and affecting local crops.
+                Rising seas have steadily eaten away at the sandy shores. Coastal trees are dying from saltwater intrusion, which turns the soil brackish and ruins local food crops.
               </p>
               <div className="mt-4">
                 <span className="font-sans text-[9px] text-soft-cyan/40 uppercase block">Sea Rise At Birth</span>

@@ -7,11 +7,23 @@ import CountryComparisonChart from "@/visualizations/CountryComparisonChart";
 interface AnalyticsSectionProps {
   data: ProcessedCountryData[];
   regionalAverage: { year: number; value: number }[];
+  selectedCountryA: string;
+  setSelectedCountryA: (c: string) => void;
+  selectedCountryB: string;
+  setSelectedCountryB: (c: string) => void;
+  projectionYear: number;
+  projectionScenario: "low" | "high";
 }
 
 export default function AnalyticsSection({
   data,
   regionalAverage,
+  selectedCountryA,
+  setSelectedCountryA,
+  selectedCountryB,
+  setSelectedCountryB,
+  projectionYear,
+  projectionScenario,
 }: AnalyticsSectionProps) {
   return (
     <section className="relative w-full min-h-screen bg-[#030d14]/30 px-6 py-24 select-none border-b border-white/5">
@@ -23,17 +35,25 @@ export default function AnalyticsSection({
             07 / DATA ANALYSIS
           </span>
           <h2 className="font-serif text-3xl md:text-5xl font-bold leading-tight text-sea-foam">
-            The Data Behind The Story
+            The Data Behind the Story
           </h2>
           <p className="font-sans text-xs md:text-sm text-sea-foam/70 max-w-3xl leading-relaxed">
-            High-precision satellite altimetry data provides the foundation for these insights. The following visualizations demonstrate the long-term regional sea level trend alongside an interactive comparison tool to contrast individual island trajectories.
+            High-precision satellite altimetry data provides the foundation for these insights. The visualizations below show the long-term regional sea-level trend alongside an interactive tool to compare individual island trajectories.
           </p>
         </div>
 
         {/* Stacked Layout for Full-Width Immersive Experience */}
         <div className="flex flex-col gap-12 w-full">
           <TrendChart regionalAverage={regionalAverage} />
-          <CountryComparisonChart data={data} />
+          <CountryComparisonChart 
+            data={data} 
+            selectedCountryA={selectedCountryA}
+            setSelectedCountryA={setSelectedCountryA}
+            selectedCountryB={selectedCountryB}
+            setSelectedCountryB={setSelectedCountryB}
+            projectionYear={projectionYear}
+            projectionScenario={projectionScenario}
+          />
         </div>
 
       </div>

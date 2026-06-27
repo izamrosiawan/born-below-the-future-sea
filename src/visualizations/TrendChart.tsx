@@ -87,7 +87,7 @@ export default function TrendChart({ regionalAverage }: TrendChartProps) {
 
     // Minimalist Axes
     const xAxis = d3.axisBottom(xScale).ticks(10).tickFormat(d3.format("d"));
-    const yAxis = d3.axisLeft(yScale).ticks(5).tickFormat((d) => `${(Number(d) * 1000).toFixed(0)}mm`);
+    const yAxis = d3.axisLeft(yScale).ticks(5).tickFormat((d) => `${(Number(d) * 1000).toFixed(0)} mm`);
 
     svg
       .append("g")
@@ -212,13 +212,13 @@ export default function TrendChart({ regionalAverage }: TrendChartProps) {
     textGroup2.append("text")
       .attr("fill", "#F5F7FA")
       .attr("dy", "12")
-      .attr("class", "font-sans text-[10px] opacity-70")
-      .text("Rate of rise nearly doubled");
+      .attr("class", "font-sans text-xs opacity-70")
+      .text("The rate of rise nearly doubled");
     textGroup2.append("text")
       .attr("fill", "#F5F7FA")
       .attr("dy", "24")
-      .attr("class", "font-sans text-[10px] opacity-70")
-      .text("due to increased ice sheet melting.");
+      .attr("class", "font-sans text-xs opacity-70")
+      .text("due to accelerated ice sheet melting.");
 
     // Right-side explanation guide
     const sidebar = svg.append("g").attr("transform", `translate(${width - margin.right + 30}, ${margin.top + 30})`);
@@ -232,19 +232,19 @@ export default function TrendChart({ regionalAverage }: TrendChartProps) {
       .attr("fill", "#F5F7FA")
       .attr("dy", "22")
       .attr("class", "font-sans text-xs opacity-75")
-      .text("Since 1993, the Pacific ocean has");
+      .text("Since 1993, the Pacific Ocean has");
       
     sidebar.append("text")
       .attr("fill", "#F5F7FA")
       .attr("dy", "38")
       .attr("class", "font-sans text-xs opacity-75")
-      .text("risen by an average of 110mm.");
+      .text("risen by an average of 110 mm.");
 
     sidebar.append("text")
       .attr("fill", "#F5F7FA")
       .attr("dy", "60")
       .attr("class", "font-sans text-xs opacity-70 italic")
-      .text("To a layperson, 110mm sounds small.");
+      .text("To a layperson, 110 mm sounds small.");
 
     sidebar.append("text")
       .attr("fill", "#F5F7FA")

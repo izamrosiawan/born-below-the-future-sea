@@ -15,13 +15,13 @@ export default function LitiaSection() {
             Meet Litia
           </h2>
           <p className="font-sans text-sm md:text-base text-sea-foam/80 leading-relaxed">
-            In 2024, Litia was born in a coastal village in Fiji. She inherits a shoreline in flux, though she does not yet know about thermal expansion, melting ice sheets, or global greenhouse emissions.
+            In 2024, Litia was born in a coastal village in Fiji. She inherits a shoreline in flux, though she is still too young to understand thermal expansion, melting ice sheets, or rising greenhouse gas emissions.
           </p>
           <p className="font-sans text-sm md:text-base text-sea-foam/80 leading-relaxed">
-            To her, the ocean is a constant and familiar presence. It provides food for her family, acts as a backdrop for communal stories, and lulls her to sleep.
+            To her, the ocean is a constant, reassuring presence. It sustains her family, shapes communal stories, and lulls her to sleep.
           </p>
           <p className="font-sans text-sm md:text-base text-sea-foam/70 italic leading-relaxed border-l-2 border-soft-cyan/30 pl-4">
-            Yet, the waters Litia was born into have already risen significantly since her parents took their first steps on these shores. By the time she reaches adulthood, that change will have accelerated.
+            Yet, the sea around her home has already risen significantly since her parents took their first steps on these shores. By the time she reaches adulthood, this change will have accelerated.
           </p>
         </AnimatedSection>
 

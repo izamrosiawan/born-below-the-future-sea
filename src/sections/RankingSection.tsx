@@ -22,16 +22,16 @@ export default function RankingSection({ top5, bottom5 }: RankingSectionProps) {
             04 / DIVERGENT TIDES
           </span>
           <h2 className="font-serif text-3xl md:text-5xl font-bold leading-tight text-sea-foam">
-            Not All Islands Change Equally
+            Not All Islands Rise Equally
           </h2>
           <p className="font-sans text-sm md:text-base text-sea-foam/80 leading-relaxed">
-            The ocean is not a uniform basin. Due to Earth's rotation, localized gravitational influences, prevailing currents, and wind patterns, ocean volume accumulates unevenly across regions.
+            The ocean does not rise evenly like water in a bathtub. Due to Earth's rotation, localized gravitational pull, prevailing currents, and wind patterns, water accumulates unevenly across different regions.
           </p>
           <p className="font-sans text-sm md:text-base text-sea-foam/80 leading-relaxed">
-            Some Pacific archipelagoes experience localized sea level rise at double or triple the global average rate. Islands like the <strong className="font-semibold text-soft-cyan">Solomon Islands</strong> and <strong className="font-semibold text-soft-cyan">Niue</strong> are experiencing rapid shoreline retreat, while others like the <strong className="font-semibold text-soft-cyan">Northern Mariana Islands</strong> experience comparatively slower rates.
+            Some Pacific archipelagos experience localized sea-level rise at double or triple the global average rate. Islands like the <strong className="font-semibold text-soft-cyan">Solomon Islands</strong> and <strong className="font-semibold text-soft-cyan">Niue</strong> face rapid shoreline retreat, while others, like the <strong className="font-semibold text-soft-cyan">Northern Mariana Islands</strong>, see comparatively slower rates of rise.
           </p>
           <p className="font-sans text-sm md:text-base text-sea-foam/70 italic leading-relaxed border-l-2 border-soft-cyan/30 pl-4">
-            Because sea levels do not rise uniformly, climate adaptation strategies cannot be one-size-fits-all. Resource allocation, coastal engineering, and migration planning must be tailored to the specific oceanographic pressures of each archipelago.
+            Because sea levels rise unevenly, climate adaptation cannot be a one-size-fits-all solution. Funding, coastal defenses, and migration planning must be tailored to the specific oceanographic pressures of each archipelago.
           </p>
         </AnimatedSection>
 

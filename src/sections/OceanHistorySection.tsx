@@ -45,10 +45,10 @@ export default function OceanHistorySection() {
             In 1993, high-precision satellite altimetry began recording global sea levels, establishing a baseline of zero deviation.
           </p>
           <p className="font-sans text-sm md:text-base text-sea-foam/80 leading-relaxed">
-            For generations, the shorelines of Fiji, Samoa, and Tuvalu had remained relatively stable, with seasonal tides shaping familiar coastlines.
+            For generations, the shorelines of Fiji, Samoa, and Tuvalu had remained relatively stable, with seasonal tides gently sculpting the shores.
           </p>
           <p className="font-sans text-sm md:text-base text-sea-foam/70 italic leading-relaxed border-l-2 border-soft-cyan/30 pl-4">
-            But beneath the surface, a thermodynamic shift was underway. The oceans were already absorbing over 90% of the excess heat trapped by greenhouse gas emissions, initiating a continuous thermal expansion.
+            But beneath the surface, a thermodynamic shift was already underway. The oceans were absorbing over 90% of the excess heat trapped by greenhouse gas emissions, triggering a steady, irreversible thermal expansion.
           </p>
         </AnimatedSection>
       </div>

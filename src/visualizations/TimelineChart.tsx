@@ -97,7 +97,7 @@ export default function TimelineChart({
 
     // Axes
     const xAxis = d3.axisBottom(xScale).ticks(8).tickFormat(d3.format("d"));
-    const yAxis = d3.axisLeft(yScale).ticks(5).tickFormat((d) => `${(Number(d) * 1000).toFixed(0)}mm`);
+    const yAxis = d3.axisLeft(yScale).ticks(5).tickFormat((d) => `${(Number(d) * 1000).toFixed(0)} mm`);
 
     svg
       .append("g")
@@ -203,7 +203,7 @@ export default function TimelineChart({
             </div>
             <span className="font-serif text-sm font-bold text-sea-foam tracking-tight">
               {stat.value >= 0 ? "+" : ""}
-              {(stat.value * 1000).toFixed(0)}mm
+              {(stat.value * 1000).toFixed(0)} mm
             </span>
           </div>
         ))}
