@@ -163,13 +163,13 @@ export default function CountryComparisonChart({
     const histB = datasetB.filter(d => d.year <= 2024);
     const projB = datasetB.filter(d => d.year >= 2024);
 
-    // 1. Draw Country A Lines (Cyan)
+    // 1. Draw Country A Lines (Red)
     // Historical (Solid)
     svg
       .append("path")
       .datum(histA)
       .attr("fill", "none")
-      .attr("stroke", "#00B4D8")
+      .attr("stroke", "#E63946")
       .attr("stroke-width", 3)
       .attr("filter", "url(#glow-A)")
       .attr("opacity", 0.95)
@@ -180,20 +180,20 @@ export default function CountryComparisonChart({
       .append("path")
       .datum(projA)
       .attr("fill", "none")
-      .attr("stroke", "#00B4D8")
+      .attr("stroke", "#E63946")
       .attr("stroke-width", 2)
       .attr("stroke-dasharray", "4 4")
       .attr("filter", "url(#glow-A)")
       .attr("opacity", 0.7)
       .attr("d", lineGen);
 
-    // 2. Draw Country B Lines (Red)
+    // 2. Draw Country B Lines (Cyan)
     // Historical (Solid)
     svg
       .append("path")
       .datum(histB)
       .attr("fill", "none")
-      .attr("stroke", "#E63946")
+      .attr("stroke", "#00B4D8")
       .attr("stroke-width", 3)
       .attr("filter", "url(#glow-B)")
       .attr("opacity", 0.95)
@@ -204,7 +204,7 @@ export default function CountryComparisonChart({
       .append("path")
       .datum(projB)
       .attr("fill", "none")
-      .attr("stroke", "#E63946")
+      .attr("stroke", "#00B4D8")
       .attr("stroke-width", 2)
       .attr("stroke-dasharray", "4 4")
       .attr("filter", "url(#glow-B)")
@@ -478,7 +478,7 @@ export default function CountryComparisonChart({
       {/* Numerical Stats Panel */}
       <div className="grid grid-cols-2 gap-8 border-t border-white/5 pt-4">
         {recordA && (
-          <div className="flex flex-col border-l-2 border-[#00B4D8] pl-4">
+          <div className="flex flex-col border-l-2 border-[#E63946] pl-4">
             <span className="font-sans text-[10px] text-sea-foam/50 uppercase tracking-widest font-semibold">
               {recordA.country} {projectionYear > 2024 ? `Projected Rise (${projectionYear})` : "Net Rise"}
             </span>
@@ -491,7 +491,7 @@ export default function CountryComparisonChart({
           </div>
         )}
         {recordB && (
-          <div className="flex flex-col border-l-2 border-[#E63946] pl-4">
+          <div className="flex flex-col border-l-2 border-[#00B4D8] pl-4">
             <span className="font-sans text-[10px] text-sea-foam/50 uppercase tracking-widest font-semibold">
               {recordB.country} {projectionYear > 2024 ? `Projected Rise (${projectionYear})` : "Net Rise"}
             </span>

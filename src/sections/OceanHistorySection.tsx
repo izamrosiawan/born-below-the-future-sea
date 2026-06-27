@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, ReactNode } from "react";
 import AnimatedSection from "@/components/AnimatedSection";
 
 interface Milestone {
@@ -9,6 +9,10 @@ interface Milestone {
   desc: string;
   badge: string;
   detail: string;
+  rightTitle: string;
+  rightPara1: ReactNode;
+  rightPara2: ReactNode;
+  rightPara3: ReactNode;
 }
 
 export default function OceanHistorySection() {
@@ -18,28 +22,56 @@ export default function OceanHistorySection() {
       title: "The Global Baseline Year",
       desc: "Standard reference point zero for all modern sea-level rise observations.",
       badge: "Satellite Altimetry",
-      detail: "Precision satellites begin continuous measurements, establishing a reference point zero to track changes across the globe."
+      detail: "Precision satellites begin continuous measurements, establishing a reference point zero to track changes across the globe.",
+      rightTitle: "The 1993 Baseline",
+      rightPara1: "In 1993, high-precision satellite altimetry began recording global sea levels, establishing a baseline of zero deviation.",
+      rightPara2: (
+        <>
+          For generations, the shorelines of <span className="text-[#E63946] font-bold">Fiji</span>, Samoa, and <span className="text-[#00B4D8] font-bold">Tuvalu</span> had remained relatively stable, with seasonal tides gently sculpting the shores.
+        </>
+      ),
+      rightPara3: "But beneath the surface, a thermodynamic shift was already underway. The oceans were absorbing over 90% of the excess heat trapped by greenhouse gas emissions, triggering a steady, irreversible thermal expansion."
     },
     {
       year: 2005,
       title: "Thermal Expansion Surge",
       desc: "Ocean heat content spikes, driving accelerated thermal expansion of seawater.",
       badge: "Thermodynamics",
-      detail: "The upper oceans absorb the majority of trapped heat energy, expanding water volume and accelerating localized shore erosion."
+      detail: "The upper oceans absorb the majority of trapped heat energy, expanding water volume and accelerating localized shore erosion.",
+      rightTitle: "The Heat Absorption",
+      rightPara1: "By 2005, the rate of ocean warming became undeniable. The upper layers of the ocean absorbed vast amounts of solar radiation.",
+      rightPara2: (
+        <>
+          In <span className="text-[#E63946] font-bold">Fiji</span> and Samoa, coastal communities began noticing that high tides were creeping higher up the shore, washing away seasonal sandbars.
+        </>
+      ),
+      rightPara3: "This thermodynamic expansion of warming water molecules accounted for nearly all sea level rise during this decade, quietly eroding the foundations of island villages."
     },
     {
       year: 2015,
       title: "Cryosphere Meltdown",
       desc: "Glacier and ice sheet meltwater surpasses expansion as the main driver of rise.",
       badge: "Ice Sheets",
-      detail: "Mass loss from Greenland and Antarctic ice sheets triples compared to the 1990s, dumping billions of tons of water into the seas."
+      detail: "Mass loss from Greenland and Antarctic ice sheets triples compared to the 1990s, dumping billions of tons of water into the seas.",
+      rightTitle: "The Ice Sheets Awake",
+      rightPara1: "In 2015, scientific ledgers recorded a profound shift: the melting of land-based ice sheets became the dominant driver of sea level rise.",
+      rightPara2: "Greenland and West Antarctica were losing ice mass at three times the rate observed in the 1990s, pouring freshwater directly into the global ocean.",
+      rightPara3: "No longer just thermal expansion; the sheer mass of the ocean was increasing, pushing high-tide waters directly into freshwater wells on low-lying atolls."
     },
     {
       year: 2024,
       title: "The Modern Reality",
       desc: "Pacific sea levels reach historic heights, threatening low-lying archipelagos.",
       badge: "Present Frontline",
-      detail: "Fiji registers a net rise of +111.6 mm. High-tide flooding becomes a frequent hazard rather than a rare seasonal event."
+      detail: "Fiji registers a net rise of +111.6 mm. High-tide flooding becomes a frequent hazard rather than a rare seasonal event.",
+      rightTitle: "Litia's Present Reality",
+      rightPara1: "Today, in 2024, the cumulative effect of these decades of warming and melting has created a vastly different ocean environment.",
+      rightPara2: (
+        <>
+          <span className="text-[#E63946] font-bold">Fiji</span>'s sea levels have risen by 111.6 mm. What was once dry beach barrier during high tide is now frequently underwater.
+        </>
+      ),
+      rightPara3: "For Litia, born into this reality, the ocean is a source of life but also an increasing threat to her village's survival. The baseline of her parents' childhood has vanished."
     }
   ];
 
@@ -100,23 +132,21 @@ export default function OceanHistorySection() {
           </div>
         </AnimatedSection>
 
-        {/* Right Column: Historical Narrative */}
-        <AnimatedSection delay={200} className="flex flex-col gap-6">
-          <span className="font-sans text-[10px] text-soft-cyan uppercase tracking-widest font-semibold">
+        {/* Right Column: Historical Narrative (Dynamic reflection of selected milestone) */}
+        <AnimatedSection key={active.year} delay={100} className="flex flex-col gap-6">
+          <span className="font-sans text-[10px] text-soft-cyan uppercase tracking-widest font-semibold animate-fade-in">
             02 / THE BASELINE
           </span>
-          <h2 className="font-serif text-3xl md:text-5xl font-bold leading-tight text-sea-foam">
-            The 1993 Baseline
+          <h2 className="font-serif text-3xl md:text-5xl font-bold leading-tight text-sea-foam animate-fade-in">
+            {active.rightTitle}
           </h2>
-          <p className="font-sans text-sm md:text-base text-sea-foam/80 leading-relaxed">
-            In 1993, high-precision satellite altimetry began recording global sea levels, establishing a baseline of zero deviation.
-          </p>
-          <p className="font-sans text-sm md:text-base text-sea-foam/80 leading-relaxed">
-            For generations, the shorelines of Fiji, Samoa, and Tuvalu had remained relatively stable, with seasonal tides gently sculpting the shores.
-          </p>
-          <p className="font-sans text-sm md:text-base text-sea-foam/70 italic leading-relaxed border-l-2 border-soft-cyan/30 pl-4">
-            But beneath the surface, a thermodynamic shift was already underway. The oceans were absorbing over 90% of the excess heat trapped by greenhouse gas emissions, triggering a steady, irreversible thermal expansion.
-          </p>
+          <div className="font-sans text-sm md:text-base text-sea-foam/80 leading-relaxed animate-fade-in flex flex-col gap-4">
+            <p>{active.rightPara1}</p>
+            <p>{active.rightPara2}</p>
+            <div className="font-sans text-sm md:text-base text-sea-foam/70 italic leading-relaxed border-l-2 border-soft-cyan/30 pl-4 animate-fade-in mt-2">
+              {active.rightPara3}
+            </div>
+          </div>
         </AnimatedSection>
       </div>
     </section>

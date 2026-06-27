@@ -24,10 +24,10 @@ export default function TimelineChart({
   }, [data, selectedCountries]);
 
   const colors: { [key: string]: string } = {
-    Fiji: "#00B4D8",
+    Fiji: "#E63946",
     Samoa: "#4CC9F0",
     Tonga: "#F5F7FA",
-    Tuvalu: "#E63946",
+    Tuvalu: "#00B4D8",
     Kiribati: "#F4A261",
     "Cook Islands": "#2A9D8F",
     "American Samoa": "#9B5DE5",

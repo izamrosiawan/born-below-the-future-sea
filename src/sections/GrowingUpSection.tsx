@@ -101,7 +101,7 @@ export default function GrowingUpSection() {
                 Rising seas have aggressively swallowed the beaches. Salty groundwater kills coastal palms, ruins crops, and infiltrates drinking wells, threatening the village's very existence.
               </p>
               <div className="mt-2 border-t border-white/5 pt-3">
-                <span className="font-sans text-[8px] text-soft-cyan/40 uppercase block font-bold">Sea Rise Since Birth</span>
+                <span className="font-sans text-[8px] text-soft-cyan/40 uppercase block font-bold">Sea Rise At Birth</span>
                 <span className="font-serif text-2xl font-black text-soft-cyan">+111.6 mm</span>
               </div>
             </div>

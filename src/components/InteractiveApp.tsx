@@ -124,7 +124,7 @@ export default function InteractiveApp({ raw, derived }: InteractiveAppProps) {
       <AudioToggle />
 
       {/* FIXED SIDEBAR: Premium Scrollytelling Chapter Navigator */}
-      <div className="fixed right-8 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col items-center gap-5 bg-[#030d14]/40 border border-white/5 p-4 rounded-full backdrop-blur-md shadow-2xl">
+      <div className="fixed right-8 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col items-center gap-5 bg-[#030d14]/45 border border-white/5 p-4 rounded-full backdrop-blur-md shadow-2xl">
         {chapters.map((chapter) => {
           const isActive = activeSection === chapter.id;
           return (
@@ -143,7 +143,7 @@ export default function InteractiveApp({ raw, derived }: InteractiveAppProps) {
               <span 
                 className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
                   isActive 
-                    ? "w-2.5 h-2.5 bg-soft-cyan shadow-[0_0_8px_#4cc9f0] scale-125" 
+                    ? "w-2.5 h-2.5 bg-[#E63946] shadow-[0_0_8px_#E63946] scale-125" 
                     : "bg-sea-foam/30 group-hover:bg-sea-foam/60 group-hover:scale-110"
                 }`}
               />

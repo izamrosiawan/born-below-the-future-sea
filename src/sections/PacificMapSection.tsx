@@ -16,6 +16,55 @@ interface PacificMapSectionProps {
   setProjectionScenario: (s: "low" | "high") => void;
 }
 
+interface RiskAssessment {
+  status: string;
+  threat: string;
+  color: string;
+  bg: string;
+  border: string;
+}
+
+function getRiskAssessment(year: number, scenario: "low" | "high"): RiskAssessment {
+  if (year === 1993) {
+    return {
+      status: "Baseline Level (0.0 mm)",
+      threat: "Stable coastlines, normal seasonal tide ranges. Groundwater wells are fresh and soil is fertile.",
+      color: "text-sea-foam/60",
+      bg: "bg-white/5",
+      border: "border-white/10"
+    };
+  } else if (year <= 2024) {
+    return {
+      status: "Elevated High Tides (~ +110 mm)",
+      threat: "Active shoreline erosion, palm trees dying near shores. Saltwater starts intruding shallow soil layers.",
+      color: "text-amber-400",
+      bg: "bg-amber-400/5",
+      border: "border-amber-400/25"
+    };
+  } else if (year <= 2050) {
+    return {
+      status: "Critical Inundation Danger (~ +220 mm)",
+      threat: "Frequent flooding of roads during high tides. Soil becomes brackish, damaging food crops like taro and yam.",
+      color: "text-rose-400 animate-pulse",
+      bg: "bg-rose-400/5",
+      border: "border-rose-400/20"
+    };
+  } else {
+    // 2051 to 2100
+    const riseVal = scenario === "low" ? "380" : "750";
+    const threatMsg = scenario === "low" 
+      ? "Severe coastal retreat. Extensive adaptation is required, including building seawalls and relocating inland houses."
+      : "Catastrophic submergence of low-lying atolls. Forced community displacement and loss of sovereign territories.";
+    return {
+      status: `Extreme Submergence Risk (~ +${riseVal} mm)`,
+      threat: threatMsg,
+      color: "text-red-500 font-bold",
+      bg: "bg-red-500/5",
+      border: "border-red-500/20"
+    };
+  }
+}
+
 export default function PacificMapSection({
   data,
   selectedCountryA,
@@ -27,6 +76,8 @@ export default function PacificMapSection({
   projectionScenario,
   setProjectionScenario,
 }: PacificMapSectionProps) {
+  const risk = getRiskAssessment(projectionYear, projectionScenario);
+
   return (
     <section className="relative w-full min-h-screen flex items-center justify-center bg-transparent px-6 py-24 select-none border-b border-white/5">
       <div className="max-w-5xl w-full flex flex-col gap-8">
@@ -109,6 +160,18 @@ export default function PacificMapSection({
                 <button className={`hover:text-soft-cyan transition-colors cursor-pointer ${projectionYear === 2050 ? "text-soft-cyan font-bold" : ""}`} onClick={() => setProjectionYear(2050)}>2050 (Projected)</button>
                 <button className={`hover:text-soft-cyan transition-colors cursor-pointer ${projectionYear === 2100 ? "text-soft-cyan font-bold" : ""}`} onClick={() => setProjectionYear(2100)}>2100 (Cent. End)</button>
               </div>
+            </div>
+          </div>
+
+          {/* Immersive HUD Risk Assessment Readout banner */}
+          <div className={`grid grid-cols-1 md:grid-cols-12 gap-4 p-4 rounded-xl border ${risk.border} ${risk.bg} transition-all duration-500 mt-2`}>
+            <div className="md:col-span-4 flex flex-col gap-1">
+              <span className="font-sans text-[8px] text-sea-foam/40 uppercase tracking-widest font-bold">Threat Indicator Level</span>
+              <span className={`font-serif text-sm font-bold ${risk.color}`}>{risk.status}</span>
+            </div>
+            <div className="md:col-span-8 flex flex-col gap-1 border-t md:border-t-0 md:border-l border-white/10 pt-2 md:pt-0 md:pl-4">
+              <span className="font-sans text-[8px] text-sea-foam/40 uppercase tracking-widest font-bold">Frontline Societal & Ecological Impact</span>
+              <span className="font-sans text-xs text-sea-foam/85 leading-relaxed">{risk.threat}</span>
             </div>
           </div>
         </AnimatedSection>
