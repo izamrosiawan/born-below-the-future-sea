@@ -415,13 +415,13 @@ export default function CountryComparisonChart({
   // Read year values directly for comparison values
   const activeValA = useMemo(() => {
     if (!recordA) return 0;
-    const pt = datasetA.find(d => d.year === projectionYear);
+    const pt = datasetA.find(d => d.year == projectionYear);
     return pt ? pt.value : 0;
   }, [recordA, datasetA, projectionYear]);
 
   const activeValB = useMemo(() => {
     if (!recordB) return 0;
-    const pt = datasetB.find(d => d.year === projectionYear);
+    const pt = datasetB.find(d => d.year == projectionYear);
     return pt ? pt.value : 0;
   }, [recordB, datasetB, projectionYear]);
 

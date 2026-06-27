@@ -23,7 +23,7 @@ interface IslandCoords {
 
 function getYearValue(countryData: ProcessedCountryData, year: number, scenario: "low" | "high") {
   if (year <= 2024) {
-    const pt = countryData.data.find((d) => d.year === year);
+    const pt = countryData.data.find((d) => d.year == year);
     return pt ? pt.value : 0;
   }
   

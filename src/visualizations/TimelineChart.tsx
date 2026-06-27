@@ -35,7 +35,7 @@ export default function TimelineChart({
 
   const activeStats = useMemo(() => {
     return filteredData.map((c) => {
-      const yearData = c.data.find((d) => d.year === currentYear);
+      const yearData = c.data.find((d) => d.year == currentYear);
       return {
         country: c.country,
         value: yearData ? yearData.value : 0,
