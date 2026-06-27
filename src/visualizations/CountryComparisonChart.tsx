@@ -303,7 +303,7 @@ export default function CountryComparisonChart({
       .text("while another follows a more");
 
     sidebar.append("text")
-      .attr("fill", "#00B4D8")
+      .attr("fill", "#E63946")
       .attr("dy", "114")
       .attr("class", "font-sans text-xs font-bold")
       .text("gradual and persistent curve.");
@@ -324,14 +324,14 @@ export default function CountryComparisonChart({
     const hoverDotA = hoverGroup
       .append("circle")
       .attr("r", 5)
-      .attr("fill", "#00B4D8")
+      .attr("fill", "#E63946")
       .attr("stroke", "#030d14")
       .attr("stroke-width", 2);
 
     const hoverDotB = hoverGroup
       .append("circle")
       .attr("r", 5)
-      .attr("fill", "#E63946")
+      .attr("fill", "#00B4D8")
       .attr("stroke", "#030d14")
       .attr("stroke-width", 2);
 
@@ -361,14 +361,14 @@ export default function CountryComparisonChart({
       .append("text")
       .attr("x", 12)
       .attr("y", 36)
-      .attr("fill", "#00B4D8")
+      .attr("fill", "#E63946")
       .attr("class", "font-sans text-xs font-semibold");
 
     const tooltipValB = tooltip
       .append("text")
       .attr("x", 12)
       .attr("y", 54)
-      .attr("fill", "#E63946")
+      .attr("fill", "#00B4D8")
       .attr("class", "font-sans text-xs font-semibold");
 
     const bisect = d3.bisector<{ year: number; value: number }, number>((d) => d.year).center;
@@ -441,11 +441,11 @@ export default function CountryComparisonChart({
         </div>
         <div className="flex gap-4 self-start sm:self-center">
           <div className="flex flex-col gap-1">
-            <span className="font-sans text-[9px] text-[#00B4D8] uppercase tracking-wider font-bold">Country A</span>
+            <span className="font-sans text-[9px] text-[#E63946] uppercase tracking-wider font-bold">Country A</span>
             <select
               value={selectedCountryA}
               onChange={(e) => setSelectedCountryA(e.target.value)}
-              className="bg-[#030d14]/80 text-sea-foam text-xs border border-white/10 rounded-lg px-3 py-1.5 outline-none focus:border-soft-cyan/50 focus:ring-1 focus:ring-soft-cyan/30 cursor-pointer"
+              className="bg-[#030d14]/80 text-sea-foam text-xs border border-[#E63946]/45 rounded-lg px-3 py-1.5 outline-none focus:border-[#E63946]/80 focus:ring-1 focus:ring-[#E63946]/35 cursor-pointer"
             >
               {data.map((c) => (
                 <option key={c.country} value={c.country} disabled={c.country === selectedCountryB}>
@@ -455,11 +455,11 @@ export default function CountryComparisonChart({
             </select>
           </div>
           <div className="flex flex-col gap-1">
-            <span className="font-sans text-[9px] text-[#E63946] uppercase tracking-wider font-bold">Country B</span>
+            <span className="font-sans text-[9px] text-[#00B4D8] uppercase tracking-wider font-bold">Country B</span>
             <select
               value={selectedCountryB}
               onChange={(e) => setSelectedCountryB(e.target.value)}
-              className="bg-[#030d14]/80 text-sea-foam text-xs border border-white/10 rounded-lg px-3 py-1.5 outline-none focus:border-soft-cyan/50 focus:ring-1 focus:ring-soft-cyan/30 cursor-pointer"
+              className="bg-[#030d14]/80 text-sea-foam text-xs border border-[#00B4D8]/45 rounded-lg px-3 py-1.5 outline-none focus:border-[#00B4D8]/80 focus:ring-1 focus:ring-[#00B4D8]/35 cursor-pointer"
             >
               {data.map((c) => (
                 <option key={c.country} value={c.country} disabled={c.country === selectedCountryA}>

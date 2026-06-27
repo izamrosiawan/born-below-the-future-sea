@@ -105,13 +105,17 @@ export default function TimelineSection({ data }: TimelineSectionProps) {
               Interactive Chronicle
             </span>
             <div className="min-h-[160px] flex flex-col justify-between">
-              <p className="font-sans text-sm text-sea-foam/90 leading-relaxed transition-all duration-300">
-                {year === 1993 && "Precision satellite altimetry begins, establishing a 0.0 mm reference baseline to launch a continuous global record of sea-level change."}
-                {year > 1993 && year < 2000 && "Natural climate cycles show their influence. The severe 1997-1998 El Niño causes a temporary drop in Western Pacific sea levels, followed by a rapid rebound."}
-                {year >= 2000 && year < 2010 && "Rising temperatures drive ocean thermal expansion. By the end of the decade, sea levels around Samoa and Tonga rise more than 40 mm above the baseline."}
-                {year >= 2010 && year < 2020 && "The pace of sea-level rise quickens. High-tide flooding begins to regularly submerge coastal farmland and threaten vital freshwater lenses."}
-                {year >= 2020 && "By 2024, Fiji registers a localized rise of 111.6 mm. The surrounding ocean is now visibly higher, warmer, and more volatile than the sea known by previous generations."}
-              </p>
+              <div className="font-sans text-sm text-sea-foam/90 leading-relaxed transition-all duration-300 min-h-[120px] flex flex-col justify-center">
+                {year === 1993 && <p>Precision satellite altimetry begins, establishing a 0.0 mm reference baseline to launch a continuous global record of sea-level change.</p>}
+                {year > 1993 && year < 2000 && <p>Natural climate cycles show their influence. The severe 1997-1998 El Niño causes a temporary drop in Western Pacific sea levels, followed by a rapid rebound.</p>}
+                {year >= 2000 && year < 2010 && <p>Rising temperatures drive ocean thermal expansion. By the end of the decade, sea levels around Samoa and Tonga rise more than 40 mm above the baseline.</p>}
+                {year >= 2010 && year < 2020 && <p>The pace of sea-level rise quickens. High-tide flooding begins to regularly submerge coastal farmland and threaten vital freshwater lenses.</p>}
+                {year >= 2020 && (
+                  <p>
+                    By 2024, <span className="text-[#E63946] font-bold">Fiji</span> registers a localized rise of 111.6 mm. The surrounding ocean is now visibly higher, warmer, and more volatile than the sea known by previous generations.
+                  </p>
+                )}
+              </div>
 
               <div className="border-t border-white/10 pt-4 mt-4 flex items-center justify-between">
                 <span className="font-sans text-[10px] text-sea-foam/40 uppercase">Scroll to scrub timeline</span>
