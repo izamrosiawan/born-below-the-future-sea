@@ -26,13 +26,13 @@ export default function AnalyticsSection({
   projectionScenario,
 }: AnalyticsSectionProps) {
   return (
-    <section className="relative w-full min-h-screen bg-[#030d14]/30 px-6 py-24 select-none border-b border-white/5">
+    <section className="relative w-full min-h-screen bg-transparent px-6 py-24 select-none">
       <div className="max-w-5xl w-full mx-auto flex flex-col gap-12">
         
         {/* Header */}
         <div className="flex flex-col gap-3 border-b border-white/10 pb-6">
           <span className="font-sans text-[10px] text-soft-cyan uppercase tracking-widest font-semibold">
-            07 / DATA ANALYSIS
+            DATA ANALYSIS
           </span>
           <h2 className="font-serif text-3xl md:text-5xl font-bold leading-tight text-sea-foam">
             The Data Behind the Story

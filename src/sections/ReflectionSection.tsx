@@ -24,7 +24,7 @@ export default function ReflectionSection() {
   }, [isIntersecting]);
 
   return (
-    <section className="relative w-full min-h-screen flex flex-col justify-between items-center text-center px-6 py-24 overflow-hidden bg-gradient-to-b from-[#061826] via-[#0b293d] to-[#140b03]">
+    <section className="relative w-full min-h-screen flex flex-col justify-between items-center text-center px-6 py-24 overflow-hidden bg-transparent">
       {/* Sunset Glow Overlay */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom,rgba(244,162,97,0.06)_0%,transparent_65%)] pointer-events-none" />
 
@@ -68,7 +68,7 @@ export default function ReflectionSection() {
       >
         <div className="text-center max-w-xl flex flex-col gap-2">
           <span className="font-sans text-[10px] text-soft-cyan uppercase tracking-widest font-semibold">
-            08 / THE DECISION
+            THE DECISION
           </span>
           <h3 className="font-serif text-xl md:text-2xl font-bold text-soft-cyan">
             Litia's Dilemma: An Unavoidable Future (2050)

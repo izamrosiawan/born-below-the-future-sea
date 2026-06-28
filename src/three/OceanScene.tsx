@@ -4,6 +4,21 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useRef, useMemo, useEffect } from "react";
 import * as THREE from "three";
 
+// Global-to-module scroll height caching to prevent forced reflows (layout thrashing)
+let maxScroll = 0;
+if (typeof window !== "undefined") {
+  const updateMaxScroll = () => {
+    maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+  };
+  window.addEventListener("resize", updateMaxScroll);
+  if (typeof ResizeObserver !== "undefined") {
+    const observer = new ResizeObserver(updateMaxScroll);
+    observer.observe(document.body);
+  }
+  // Initial calculation
+  setTimeout(updateMaxScroll, 100);
+}
+
 function WaveMesh() {
   const meshRef = useRef<THREE.Mesh>(null);
   
@@ -19,17 +34,6 @@ function WaveMesh() {
       uCrestColor: { value: new THREE.Color("#4CC9F0") }, // soft cyan crests
     };
   }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
-      uniforms.uScrollProgress.value = progress;
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [uniforms]);
 
   // Shader code for dynamic animated ocean surface
   const shaderArgs = useMemo(() => {
@@ -117,12 +121,14 @@ function WaveMesh() {
     if (meshRef.current) {
       const material = meshRef.current.material as THREE.ShaderMaterial;
       material.uniforms.uTime.value = state.clock.getElapsedTime();
+      const progress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+      material.uniforms.uScrollProgress.value = progress;
     }
   });
 
   return (
     <mesh ref={meshRef} rotation={[-Math.PI * 0.5, 0, 0]} position={[0, -2.5, 0]}>
-      <planeGeometry args={[65, 65, 128, 128]} />
+      <planeGeometry args={[120, 120, 128, 128]} />
       <shaderMaterial
         vertexShader={shaderArgs.vertexShader}
         fragmentShader={shaderArgs.fragmentShader}
@@ -137,29 +143,32 @@ function WaveMesh() {
 function SeaParticles({ count = 350 }) {
   const pointsRef = useRef<THREE.Points>(null);
 
+  // Initialize static particle coordinates and speed offsets
   const [positions, speeds] = useMemo(() => {
     const pos = new Float32Array(count * 3);
     const spd = new Float32Array(count);
     for (let i = 0; i < count; i++) {
       pos[i * 3] = (Math.random() - 0.5) * 45;
-      pos[i * 3 + 1] = Math.random() * 10 - 5;
+      pos[i * 3 + 1] = Math.random() * 11 - 5; // -5 to 6 range (range of 11)
       pos[i * 3 + 2] = (Math.random() - 0.5) * 45;
-      spd[i] = 0.04 + Math.random() * 0.06;
+      spd[i] = 0.8 + Math.random() * 1.2; // vertical speed units per second
     }
     return [pos, spd];
   }, [count]);
 
-  useFrame(() => {
+  const uniforms = useMemo(() => {
+    return {
+      uTime: { value: 0 },
+      uColor: { value: new THREE.Color("#4CC9F0") },
+    };
+  }, []);
+
+  useFrame((state) => {
     if (pointsRef.current) {
-      const geo = pointsRef.current.geometry;
-      const posArr = geo.attributes.position.array as Float32Array;
-      for (let i = 0; i < count; i++) {
-        posArr[i * 3 + 1] += speeds[i] * 0.04;
-        if (posArr[i * 3 + 1] > 6) {
-          posArr[i * 3 + 1] = -5;
-        }
+      const material = pointsRef.current.material as THREE.ShaderMaterial;
+      if (material.uniforms && material.uniforms.uTime) {
+        material.uniforms.uTime.value = state.clock.getElapsedTime();
       }
-      geo.attributes.position.needsUpdate = true;
     }
   });
 
@@ -170,13 +179,57 @@ function SeaParticles({ count = 350 }) {
           attach="attributes-position"
           args={[positions, 3]}
         />
+        <bufferAttribute
+          attach="attributes-aSpeed"
+          args={[speeds, 1]}
+        />
       </bufferGeometry>
-      <pointsMaterial
-        color="#4CC9F0"
-        size={0.07}
-        transparent
-        opacity={0.35}
+      <shaderMaterial
+        depthWrite={false}
+        transparent={true}
         blending={THREE.AdditiveBlending}
+        uniforms={uniforms}
+        vertexShader={`
+          uniform float uTime;
+          attribute float aSpeed;
+          varying float vOpacity;
+
+          void main() {
+            vec3 pos = position;
+            
+            // Animate Y position on the GPU:
+            // Range is from y = -5.0 to y = 6.0 (total height is 11.0)
+            float minY = -5.0;
+            float rangeY = 11.0;
+            
+            // Calculate new Y using mod to wrap around smoothly
+            pos.y = mod(pos.y + aSpeed * uTime - minY, rangeY) + minY;
+            
+            vec4 modelPosition = modelMatrix * vec4(pos, 1.0);
+            vec4 viewPosition = viewMatrix * modelPosition;
+            
+            // Size attenuation (larger when closer to camera)
+            gl_PointSize = 40.0 * aSpeed / -viewPosition.z;
+            gl_Position = projectionMatrix * viewPosition;
+            
+            // Fade out near the top (6) and bottom (-5) boundaries to prevent sudden popping
+            float distFromCenter = abs(pos.y - 0.5); // Center is 0.5
+            vOpacity = 1.0 - smoothstep(4.0, 5.5, distFromCenter);
+          }
+        `}
+        fragmentShader={`
+          varying float vOpacity;
+          uniform vec3 uColor;
+
+          void main() {
+            // Soft circular particles
+            float dist = length(gl_PointCoord - vec2(0.5));
+            if (dist > 0.5) discard;
+            
+            float alpha = smoothstep(0.5, 0.15, dist) * vOpacity * 0.45;
+            gl_FragColor = vec4(uColor, alpha);
+          }
+        `}
       />
     </points>
   );
@@ -186,7 +239,6 @@ function CameraRig() {
   const { camera, scene } = useThree();
   
   useFrame(() => {
-    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
     const progress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
     
     let targetY = 4.0;
@@ -223,11 +275,15 @@ function CameraRig() {
     if (fog && fog instanceof THREE.Fog) {
       if (progress > 0.85) {
         const t = (progress - 0.85) / 0.15;
-        fog.color.set(new THREE.Color().lerpColors(new THREE.Color("#061826"), new THREE.Color("#140b03"), t));
+        const color = new THREE.Color().lerpColors(new THREE.Color("#061826"), new THREE.Color("#140b03"), t);
+        fog.color.copy(color);
+        scene.background = color;
         fog.near = THREE.MathUtils.lerp(12, 1, t);
         fog.far = THREE.MathUtils.lerp(28, 12, t);
       } else {
-        fog.color.set(new THREE.Color("#061826"));
+        const color = new THREE.Color("#061826");
+        fog.color.copy(color);
+        scene.background = color;
         fog.near = 12;
         fog.far = 28;
       }

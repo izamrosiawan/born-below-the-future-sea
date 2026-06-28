@@ -135,7 +135,7 @@ export default function OceanHistorySection() {
         {/* Right Column: Historical Narrative (Dynamic reflection of selected milestone) */}
         <AnimatedSection key={active.year} delay={100} className="flex flex-col gap-6">
           <span className="font-sans text-[10px] text-soft-cyan uppercase tracking-widest font-semibold animate-fade-in">
-            02 / THE BASELINE
+            THE BASELINE
           </span>
           <h2 className="font-serif text-3xl md:text-5xl font-bold leading-tight text-sea-foam animate-fade-in">
             {active.rightTitle}

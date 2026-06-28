@@ -47,6 +47,8 @@ export default function CountryComparisonChart({
 }: CountryComparisonChartProps) {
   const svgRef = useRef<SVGSVGElement>(null);
 
+  const xScaleRef = useRef<d3.ScaleLinear<number, number> | null>(null);
+
   const recordA = useMemo(() => data.find((c) => c.country === selectedCountryA), [data, selectedCountryA]);
   const recordB = useMemo(() => data.find((c) => c.country === selectedCountryB), [data, selectedCountryB]);
 
@@ -65,6 +67,7 @@ export default function CountryComparisonChart({
   const height = 450;
   const margin = { top: 50, right: 240, bottom: 60, left: 60 };
 
+  // 1. Draw static chart elements and lines when data/scenario changes
   useEffect(() => {
     if (!svgRef.current || !recordA || !recordB || datasetA.length === 0 || datasetB.length === 0) return;
 
@@ -78,6 +81,7 @@ export default function CountryComparisonChart({
       .scaleLinear()
       .domain([1993, 2100])
       .range([margin.left, width - margin.right]);
+    xScaleRef.current = xScale;
 
     // Compute max/min from full projected datasets
     const maxVal = d3.max([...datasetA, ...datasetB], (d) => d.value) || 0.6;
@@ -251,7 +255,7 @@ export default function CountryComparisonChart({
       .attr("class", "font-sans text-[8px] uppercase tracking-widest font-bold")
       .text("Projections");
 
-    // Dynamic vertical timeline indicator reflecting projectionYear
+    // Dynamic vertical timeline indicator reflecting projectionYear (initial draw)
     svg
       .append("line")
       .attr("class", "projection-indicator-line")
@@ -410,7 +414,19 @@ export default function CountryComparisonChart({
         }
       });
 
-  }, [recordA, recordB, datasetA, datasetB, projectionYear, projectionScenario]);
+  }, [recordA, recordB, datasetA, datasetB, projectionScenario]);
+
+  // 2. Lightly update the vertical year indicator when projectionYear changes
+  useEffect(() => {
+    if (!svgRef.current || !xScaleRef.current) return;
+    
+    const svg = d3.select(svgRef.current);
+    const xScale = xScaleRef.current;
+    
+    svg.select(".projection-indicator-line")
+      .attr("x1", xScale(projectionYear))
+      .attr("x2", xScale(projectionYear));
+  }, [projectionYear]);
 
   // Read year values directly for comparison values
   const activeValA = useMemo(() => {

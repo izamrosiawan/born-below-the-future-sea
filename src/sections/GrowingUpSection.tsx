@@ -33,13 +33,13 @@ export default function GrowingUpSection() {
   };
 
   return (
-    <section className="relative w-full min-h-screen flex items-center justify-center bg-transparent px-6 py-24 select-none border-b border-white/5">
+    <section className="relative w-full min-h-screen flex items-center justify-center bg-transparent px-6 py-24 select-none">
       <div className="max-w-5xl w-full flex flex-col gap-12">
         
         {/* Intro Header */}
         <div className="text-center max-w-2xl mx-auto flex flex-col gap-4">
           <span className="font-sans text-[10px] text-soft-cyan uppercase tracking-widest font-semibold">
-            05 / GENERATIONAL SHIFT
+            GENERATIONAL SHIFT
           </span>
           <h2 className="font-serif text-3xl md:text-5xl font-bold leading-tight text-sea-foam">
             Growing Up With a Different Ocean

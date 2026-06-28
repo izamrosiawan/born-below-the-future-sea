@@ -14,12 +14,12 @@ export default function RankingSection({ top5, bottom5 }: RankingSectionProps) {
   const [view, setView] = useState<"fastest" | "slowest">("fastest");
 
   return (
-    <section className="relative w-full min-h-screen flex items-center justify-center bg-transparent px-6 py-24 select-none border-b border-white/5">
+    <section className="relative w-full min-h-screen flex items-center justify-center bg-transparent px-6 py-24 select-none">
       <div className="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         {/* Narrative */}
         <AnimatedSection className="flex flex-col gap-6">
           <span className="font-sans text-[10px] text-soft-cyan uppercase tracking-widest font-semibold">
-            04 / DIVERGENT TIDES
+            DIVERGENT TIDES
           </span>
           <h2 className="font-serif text-3xl md:text-5xl font-bold leading-tight text-sea-foam">
             Not All Islands Rise Equally

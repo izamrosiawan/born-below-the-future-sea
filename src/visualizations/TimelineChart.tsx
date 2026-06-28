@@ -193,8 +193,6 @@ export default function TimelineChart({
     linesEnter.merge(lines as any)
       .style("opacity", 0.85)
       .attr("stroke", (d) => colors[d.country] || "#00B4D8")
-      .transition()
-      .duration(350)
       .attr("d", (d) => {
         const activeData = d.data.filter((pt) => pt.year <= currentYear);
         return lineGen(activeData) || "";

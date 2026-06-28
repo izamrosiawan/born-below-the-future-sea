@@ -65,17 +65,14 @@ export default function TimelineSection({ data }: TimelineSectionProps) {
   }, []);
 
   return (
-    <div ref={containerRef} className="relative w-full h-screen bg-deep-ocean flex flex-col justify-center overflow-hidden">
-      {/* Background ambient lighting */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_120%,rgba(0,180,216,0.15),transparent_60%)] pointer-events-none" />
-
+    <div ref={containerRef} className="relative w-full h-screen bg-transparent flex flex-col justify-center overflow-hidden">
       <div className="max-w-7xl w-full mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center h-full">
         {/* Left Side: Pinned Chart & Live Counter */}
         <div ref={chartContainerRef} className="lg:col-span-8 flex flex-col gap-6 w-full">
           <div className="flex items-center justify-between border-b border-white/10 pb-4">
             <div>
               <span className="font-sans text-[10px] text-soft-cyan uppercase tracking-widest font-semibold">
-                03 / CHRONOLOGY
+                CHRONOLOGY
               </span>
               <h2 className="font-serif text-3xl md:text-4xl font-bold text-sea-foam mt-1">
                 Three Decades of Change

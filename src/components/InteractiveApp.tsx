@@ -1,8 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import dynamic from "next/dynamic";
 import { ProcessedCountryData } from "@/data/parser";
-import OceanScene from "@/three/OceanScene";
+
+const OceanScene = dynamic(() => import("@/three/OceanScene"), {
+  ssr: false,
+  loading: () => (
+    <div className="fixed inset-0 w-full h-full -z-20 bg-gradient-to-b from-[#030d14] via-[#061826] to-[#030d14]" />
+  ),
+});
+
 import AudioToggle from "@/components/AudioToggle";
 import HeroSection from "@/sections/HeroSection";
 import LitiaSection from "@/sections/LitiaSection";
@@ -43,15 +51,15 @@ export default function InteractiveApp({ raw, derived }: InteractiveAppProps) {
   const [activeSection, setActiveSection] = useState<string>("hero");
 
   const chapters: Chapter[] = [
-    { id: "hero", label: "01. Introduction" },
-    { id: "litia", label: "02. Litia's Shoreline" },
-    { id: "history", label: "03. The Baseline" },
-    { id: "chronology", label: "04. Three Decades" },
-    { id: "ranking", label: "05. Divergent Tides" },
-    { id: "generational", label: "06. Shoreline Shift" },
-    { id: "frontline", label: "07. Simulation Map" },
-    { id: "analysis", label: "08. Data Ledger" },
-    { id: "reflection", label: "09. The Decision" }
+    { id: "hero", label: "Introduction" },
+    { id: "litia", label: "Litia's Shoreline" },
+    { id: "history", label: "The Baseline" },
+    { id: "chronology", label: "Three Decades of Change" },
+    { id: "ranking", label: "Divergent Tides" },
+    { id: "generational", label: "Shoreline Shift" },
+    { id: "frontline", label: "Simulation Map" },
+    { id: "analysis", label: "Data Ledger" },
+    { id: "reflection", label: "The Decision" }
   ];
 
   // Simulation playback loop
@@ -108,6 +116,20 @@ export default function InteractiveApp({ raw, derived }: InteractiveAppProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Memoize static scrollytelling sections to prevent unnecessary React re-renders during simulation ticks
+  const memoizedHero = useMemo(() => <HeroSection />, []);
+  const memoizedLitia = useMemo(() => <LitiaSection />, []);
+  const memoizedHistory = useMemo(() => <OceanHistorySection />, []);
+  const memoizedTimeline = useMemo(() => <TimelineSection data={raw} />, [raw]);
+  const memoizedRanking = useMemo(() => (
+    <RankingSection 
+      top5={derived.top5Affected} 
+      bottom5={derived.top5LeastAffected} 
+    />
+  ), [derived.top5Affected, derived.top5LeastAffected]);
+  const memoizedGenerational = useMemo(() => <GrowingUpSection />, []);
+  const memoizedReflection = useMemo(() => <ReflectionSection />, []);
+
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
@@ -153,30 +175,27 @@ export default function InteractiveApp({ raw, derived }: InteractiveAppProps) {
       </div>
       
       <div id="hero">
-        <HeroSection />
+        {memoizedHero}
       </div>
       
       <div id="litia">
-        <LitiaSection />
+        {memoizedLitia}
       </div>
       
       <div id="history">
-        <OceanHistorySection />
+        {memoizedHistory}
       </div>
       
       <div id="chronology">
-        <TimelineSection data={raw} />
+        {memoizedTimeline}
       </div>
       
       <div id="ranking">
-        <RankingSection 
-          top5={derived.top5Affected} 
-          bottom5={derived.top5LeastAffected} 
-        />
+        {memoizedRanking}
       </div>
       
       <div id="generational">
-        <GrowingUpSection />
+        {memoizedGenerational}
       </div>
       
       <div id="frontline">
@@ -207,7 +226,7 @@ export default function InteractiveApp({ raw, derived }: InteractiveAppProps) {
       </div>
       
       <div id="reflection">
-        <ReflectionSection />
+        {memoizedReflection}
       </div>
     </main>
   );

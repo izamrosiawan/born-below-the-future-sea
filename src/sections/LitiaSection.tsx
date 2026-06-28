@@ -9,7 +9,7 @@ export default function LitiaSection() {
         {/* Narrative text */}
         <AnimatedSection className="flex flex-col gap-6 order-2 md:order-1">
           <span className="font-sans text-[10px] text-soft-cyan uppercase tracking-widest font-semibold">
-            01 / HUMAN CONTEXT
+            HUMAN CONTEXT
           </span>
           <h2 className="font-serif text-3xl md:text-5xl font-bold leading-tight text-sea-foam">
             Meet Litia

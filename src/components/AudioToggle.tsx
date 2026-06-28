@@ -3,6 +3,21 @@
 import { useState, useRef, useEffect } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 
+// Global-to-module scroll height caching to prevent forced reflows (layout thrashing)
+let maxScroll = 0;
+if (typeof window !== "undefined") {
+  const updateMaxScroll = () => {
+    maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+  };
+  window.addEventListener("resize", updateMaxScroll);
+  if (typeof ResizeObserver !== "undefined") {
+    const observer = new ResizeObserver(updateMaxScroll);
+    observer.observe(document.body);
+  }
+  // Initial calculation
+  setTimeout(updateMaxScroll, 100);
+}
+
 export default function AudioToggle() {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioCtxRef = useRef<AudioContext | null>(null);
@@ -91,7 +106,6 @@ export default function AudioToggle() {
     const handleScroll = () => {
       if (!audioCtxRef.current || audioCtxRef.current.state !== "running") return;
       
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
       const progress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
       
       let targetFreq = 350;

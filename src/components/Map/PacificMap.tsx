@@ -183,6 +183,210 @@ export default function PacificMap({
   const rateA = recordA ? recordA.averageRate : 0;
   const rateB = recordB ? recordB.averageRate : 0;
 
+  // Memoize static map background paths and elements (landmasses, currents, grids, compass)
+  const staticBackground = useMemo(() => {
+    return (
+      <>
+        <style>{`
+          @keyframes radar-sweep {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+          }
+          .radar-line {
+            transform-origin: 430px 240px;
+            animation: radar-sweep 16s linear infinite;
+          }
+          @keyframes pulse-glow {
+            0%, 100% { opacity: 0.15; }
+            50% { opacity: 0.35; }
+          }
+          .trench-line {
+            stroke-dasharray: 4 6;
+            animation: pulse-glow 4s ease-in-out infinite;
+          }
+        `}</style>
+
+        <defs>
+          <radialGradient id="oceanGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#00B4D8" stopOpacity="0.18" />
+            <stop offset="100%" stopColor="#061826" stopOpacity="0" />
+          </radialGradient>
+          
+          {/* Soft Translucent Spherical Gradients for Nodes */}
+          <radialGradient id="islandGlowGrad" cx="50%" cy="50%" r="50%" gradientUnits="objectBoundingBox">
+            <stop offset="0%" stopColor="#00B4D8" stopOpacity="0.25" />
+            <stop offset="60%" stopColor="#00B4D8" stopOpacity="0.08" />
+            <stop offset="100%" stopColor="#00B4D8" stopOpacity="0" />
+          </radialGradient>
+          <radialGradient id="islandGlowSelectedA" cx="50%" cy="50%" r="50%" gradientUnits="objectBoundingBox">
+            <stop offset="0%" stopColor="#E63946" stopOpacity="0.45" />
+            <stop offset="70%" stopColor="#E63946" stopOpacity="0.12" />
+            <stop offset="100%" stopColor="#E63946" stopOpacity="0" />
+          </radialGradient>
+          <radialGradient id="islandGlowSelectedB" cx="50%" cy="50%" r="50%" gradientUnits="objectBoundingBox">
+            <stop offset="0%" stopColor="#00B4D8" stopOpacity="0.45" />
+            <stop offset="70%" stopColor="#00B4D8" stopOpacity="0.12" />
+            <stop offset="100%" stopColor="#00B4D8" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+
+        {/* Stylized Geographical Landmass Outlines (Under the Grid) */}
+        <g fill="none" stroke="rgba(245,247,250,0.12)" strokeWidth="1.2" className="pointer-events-none">
+          {/* Australia (Bottom Left) */}
+          <path 
+            d="M -20 280 Q 30 290, 50 270 T 90 280 Q 110 250, 130 270 T 150 320 Q 180 350, 190 380 T 160 420 L -20 420 Z" 
+            fill="rgba(245,247,250,0.02)" 
+            stroke="rgba(245,247,250,0.08)"
+          />
+          {/* Papua New Guinea (Main Island) */}
+          <path 
+            d="M 95 185 Q 120 175, 140 180 T 170 190 T 195 192 T 215 200 Q 200 205, 185 202 T 155 200 T 120 195 T 95 190 Z" 
+            fill="rgba(245,247,250,0.02)"
+            stroke="rgba(245,247,250,0.08)"
+          />
+          {/* New Zealand (North & South Islands - Bottom) */}
+          <path d="M 440 375 L 475 395" stroke="rgba(245,247,250,0.12)" strokeWidth="2.5" strokeLinecap="round" />
+          <path d="M 470 350 Q 480 360, 485 375" stroke="rgba(245,247,250,0.12)" strokeWidth="2.0" strokeLinecap="round" />
+          {/* New Caledonia */}
+          <path d="M 290 280 L 320 295" stroke="rgba(245,247,250,0.15)" strokeWidth="2.0" strokeLinecap="round" />
+          {/* Solomon Islands chain */}
+          <path d="M 230 180 L 250 190" stroke="rgba(245,247,250,0.12)" strokeWidth="1.5" strokeLinecap="round" />
+          <path d="M 255 195 L 275 205" stroke="rgba(245,247,250,0.12)" strokeWidth="1.5" strokeLinecap="round" />
+          {/* Vanuatu chain */}
+          <path d="M 330 220 L 340 235 L 345 250" stroke="rgba(245,247,250,0.12)" strokeWidth="1.5" strokeLinecap="round" />
+          {/* Fiji land shapes under the main nodes */}
+          <path d="M 422 238 A 3 2 0 1 1 428 238 Z" fill="rgba(245,247,250,0.2)" />
+          <path d="M 432 233 A 2 1.5 0 1 1 436 233 Z" fill="rgba(245,247,250,0.2)" />
+
+          {/* Ocean Current Flowing Vectors (East to West - Drift Particle Effect) */}
+          {/* Equatorial Current */}
+          <path 
+            d="M 780 140 C 600 130, 400 150, -20 135" 
+            fill="none" 
+            stroke="rgba(76,201,240,0.18)" 
+            strokeWidth="0.8" 
+            strokeDasharray="6 22" 
+            strokeDashoffset="100"
+          >
+            <animate attributeName="strokeDashoffset" values="100;0" dur="8s" repeatCount="indefinite" />
+          </path>
+          {/* South Equatorial Current */}
+          <path 
+            d="M 780 230 C 580 200, 380 240, -20 220" 
+            fill="none" 
+            stroke="rgba(0,180,216,0.18)" 
+            strokeWidth="1.0" 
+            strokeDasharray="8 25" 
+            strokeDashoffset="150"
+          >
+            <animate attributeName="strokeDashoffset" values="150;0" dur="10s" repeatCount="indefinite" />
+          </path>
+          {/* Sub-tropical Drift */}
+          <path 
+            d="M 780 320 C 580 310, 380 330, -20 310" 
+            fill="none" 
+            stroke="rgba(76,201,240,0.15)" 
+            strokeWidth="0.8" 
+            strokeDasharray="5 20" 
+            strokeDashoffset="120"
+          >
+            <animate attributeName="strokeDashoffset" values="120;0" dur="9s" repeatCount="indefinite" />
+          </path>
+        </g>
+
+        {/* Centralized ambient glow */}
+        <circle cx={fijiCoords.cx} cy={fijiCoords.cy} r="260" fill="url(#oceanGlow)" />
+
+        {/* AMBIENT CONCENTRIC RIPPLE WAVES (Emanating from Fiji) */}
+        <circle cx={fijiCoords.cx} cy={fijiCoords.cy} r="20" fill="none" stroke="rgba(0,180,216,0.12)" strokeWidth="0.8">
+          <animate attributeName="r" values="20;180" dur="6s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.8;0" dur="6s" repeatCount="indefinite" />
+        </circle>
+        <circle cx={fijiCoords.cx} cy={fijiCoords.cy} r="20" fill="none" stroke="rgba(0,180,216,0.12)" strokeWidth="0.8">
+          <animate attributeName="r" values="20;180" dur="6s" begin="3s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.8;0" dur="6s" begin="3s" repeatCount="indefinite" />
+        </circle>
+
+        {/* Cartographic Grid Lines */}
+        <line x1="40" y1="120" x2="760" y2="120" stroke="rgba(76,201,240,0.18)" strokeWidth="0.8" strokeDasharray="6 6" />
+        <text x="50" y="112" fill="#4CC9F0" className="font-sans text-[8px] opacity-40 uppercase tracking-widest font-bold">Equator</text>
+        
+        <line x1="40" y1="240" x2="760" y2="240" stroke="rgba(76,201,240,0.06)" strokeWidth="0.6" strokeDasharray="3 3" />
+        <text x="50" y="234" fill="#4CC9F0" className="font-sans text-[7px] opacity-25 uppercase tracking-widest">10° S</text>
+
+        <line x1="40" y1="360" x2="760" y2="360" stroke="rgba(76,201,240,0.06)" strokeWidth="0.6" strokeDasharray="3 3" />
+        <text x="50" y="354" fill="#4CC9F0" className="font-sans text-[7px] opacity-25 uppercase tracking-widest">20° S</text>
+        
+        {/* Longitude meridians */}
+        <line x1="260" y1="30" x2="260" y2="370" stroke="rgba(76,201,240,0.04)" strokeWidth="0.6" strokeDasharray="3 3" />
+        <line x1="430" y1="30" x2="430" y2="370" stroke="rgba(76,201,240,0.04)" strokeWidth="0.6" strokeDasharray="3 3" />
+        <line x1="600" y1="30" x2="600" y2="370" stroke="rgba(76,201,240,0.04)" strokeWidth="0.6" strokeDasharray="3 3" />
+
+        {/* Sci-Fi Radar Observer Sweep */}
+        <line x1="430" y1="240" x2="430" y2="40" stroke="rgba(76,201,240,0.1)" strokeWidth="1.5" className="radar-line" />
+
+        {/* Deep Ocean Trenches */}
+        {/* Tonga Trench */}
+        <path
+          d="M 495 150 Q 505 250, 485 350"
+          fill="none"
+          stroke="rgba(76, 201, 240, 0.25)"
+          strokeWidth="1.2"
+          className="trench-line"
+        />
+        <text x="504" y="280" fill="rgba(76,201,240,0.3)" className="font-sans text-[6px] uppercase tracking-widest rotate-6">Tonga Trench (-10.8 km)</text>
+
+        {/* Mariana Trench */}
+        <path
+          d="M 125 50 Q 155 70, 185 110"
+          fill="none"
+          stroke="rgba(76, 201, 240, 0.25)"
+          strokeWidth="1.2"
+          className="trench-line"
+        />
+        <text x="175" y="80" fill="rgba(76,201,240,0.3)" className="font-sans text-[6px] uppercase tracking-widest rotate-12">Mariana Trench (-11.0 km)</text>
+
+        {/* COMPASS ROSE (Bottom Right Corner) */}
+        <g transform="translate(720, 335)" opacity="0.35" className="pointer-events-none">
+          <circle cx="0" cy="0" r="22" stroke="rgba(76,201,240,0.3)" strokeWidth="0.8" strokeDasharray="2 3" fill="none" />
+          <line x1="0" y1="-28" x2="0" y2="28" stroke="rgba(76,201,240,0.3)" strokeWidth="0.5" />
+          <line x1="-28" y1="0" x2="28" y2="0" stroke="rgba(76,201,240,0.3)" strokeWidth="0.5" />
+          {/* Star Pointer Needles */}
+          <polygon points="0,0 -4,0 0,-24" fill="#4CC9F0" />
+          <polygon points="0,0 4,0 0,24" fill="rgba(76,201,240,0.6)" />
+          <polygon points="0,0 0,-4 24,0" fill="rgba(76,201,240,0.6)" />
+          <polygon points="0,0 0,4 -24,0" fill="rgba(76,201,240,0.6)" />
+          {/* Cardinal Letters */}
+          <text x="0" y="-29" textAnchor="middle" fill="#4CC9F0" className="font-sans text-[7px] font-bold">N</text>
+          <text x="0" y="35" textAnchor="middle" fill="#4CC9F0" className="font-sans text-[6px]">S</text>
+          <text x="31" y="2" textAnchor="start" fill="#4CC9F0" className="font-sans text-[6px]">E</text>
+          <text x="-31" y="2" textAnchor="end" fill="#4CC9F0" className="font-sans text-[6px]">W</text>
+        </g>
+      </>
+    );
+  }, []);
+
+  // Memoize static legend scale
+  const staticLegend = useMemo(() => {
+    return (
+      <g transform="translate(670, 30)" className="pointer-events-none" opacity="0.85">
+        <rect x="0" y="0" width="105" height="60" rx="6" fill="#030d14" fillOpacity="0.85" stroke="rgba(245,247,250,0.15)" strokeWidth="0.8" />
+        <text x="10" y="16" fill="#4CC9F0" className="font-sans text-[7px] uppercase tracking-widest font-bold">Rise Scale</text>
+        
+        {/* Circle Scale 100mm */}
+        <circle cx="24" cy="38" r="14" fill="none" stroke="rgba(76,201,240,0.4)" strokeWidth="0.8" />
+        {/* Circle Scale 10mm */}
+        <circle cx="24" cy="38" r="7" fill="none" stroke="rgba(76,201,240,0.4)" strokeWidth="0.8" />
+        
+        <line x1="24" y1="24" x2="60" y2="24" stroke="rgba(245,247,250,0.25)" strokeWidth="0.5" strokeDasharray="1.5 1.5" />
+        <text x="64" y="27" fill="rgba(245,247,250,0.7)" className="font-sans text-[6.5px] font-mono">+100 mm</text>
+
+        <line x1="24" y1="31" x2="60" y2="31" stroke="rgba(245,247,250,0.25)" strokeWidth="0.5" strokeDasharray="1.5 1.5" />
+        <text x="64" y="34" fill="rgba(245,247,250,0.7)" className="font-sans text-[6.5px] font-mono">+10 mm</text>
+      </g>
+    );
+  }, []);
+
   return (
     <div className="w-full flex flex-col md:flex-row gap-6 bg-deep-ocean/50 backdrop-blur-md rounded-2xl border border-white/10 p-8 min-h-[480px] shadow-2xl">
       
@@ -213,181 +417,8 @@ export default function PacificMap({
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
         >
-          <style>{`
-            @keyframes radar-sweep {
-              from { transform: rotate(0deg); }
-              to { transform: rotate(360deg); }
-            }
-            .radar-line {
-              transform-origin: 430px 240px;
-              animation: radar-sweep 16s linear infinite;
-            }
-            @keyframes pulse-glow {
-              0%, 100% { opacity: 0.15; }
-              50% { opacity: 0.35; }
-            }
-            .trench-line {
-              stroke-dasharray: 4 6;
-              animation: pulse-glow 4s ease-in-out infinite;
-            }
-          `}</style>
-
-          <defs>
-            <radialGradient id="oceanGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#00B4D8" stopOpacity="0.18" />
-              <stop offset="100%" stopColor="#061826" stopOpacity="0" />
-            </radialGradient>
-            
-            {/* Soft Translucent Spherical Gradients for Nodes */}
-            <radialGradient id="islandGlowGrad" cx="50%" cy="50%" r="50%" gradientUnits="objectBoundingBox">
-              <stop offset="0%" stopColor="#00B4D8" stopOpacity="0.25" />
-              <stop offset="60%" stopColor="#00B4D8" stopOpacity="0.08" />
-              <stop offset="100%" stopColor="#00B4D8" stopOpacity="0" />
-            </radialGradient>
-            <radialGradient id="islandGlowSelectedA" cx="50%" cy="50%" r="50%" gradientUnits="objectBoundingBox">
-              <stop offset="0%" stopColor="#E63946" stopOpacity="0.45" />
-              <stop offset="70%" stopColor="#E63946" stopOpacity="0.12" />
-              <stop offset="100%" stopColor="#E63946" stopOpacity="0" />
-            </radialGradient>
-            <radialGradient id="islandGlowSelectedB" cx="50%" cy="50%" r="50%" gradientUnits="objectBoundingBox">
-              <stop offset="0%" stopColor="#00B4D8" stopOpacity="0.45" />
-              <stop offset="70%" stopColor="#00B4D8" stopOpacity="0.12" />
-              <stop offset="100%" stopColor="#00B4D8" stopOpacity="0" />
-            </radialGradient>
-          </defs>
-
-          {/* Stylized Geographical Landmass Outlines (Under the Grid) */}
-          <g fill="none" stroke="rgba(245,247,250,0.12)" strokeWidth="1.2" className="pointer-events-none">
-            {/* Australia (Bottom Left) */}
-            <path 
-              d="M -20 280 Q 30 290, 50 270 T 90 280 Q 110 250, 130 270 T 150 320 Q 180 350, 190 380 T 160 420 L -20 420 Z" 
-              fill="rgba(245,247,250,0.02)" 
-              stroke="rgba(245,247,250,0.08)"
-            />
-            {/* Papua New Guinea (Main Island) */}
-            <path 
-              d="M 95 185 Q 120 175, 140 180 T 170 190 T 195 192 T 215 200 Q 200 205, 185 202 T 155 200 T 120 195 T 95 190 Z" 
-              fill="rgba(245,247,250,0.02)"
-              stroke="rgba(245,247,250,0.08)"
-            />
-            {/* New Zealand (North & South Islands - Bottom) */}
-            <path d="M 440 375 L 475 395" stroke="rgba(245,247,250,0.12)" strokeWidth="2.5" strokeLinecap="round" />
-            <path d="M 470 350 Q 480 360, 485 375" stroke="rgba(245,247,250,0.12)" strokeWidth="2.0" strokeLinecap="round" />
-            {/* New Caledonia */}
-            <path d="M 290 280 L 320 295" stroke="rgba(245,247,250,0.15)" strokeWidth="2.0" strokeLinecap="round" />
-            {/* Solomon Islands chain */}
-            <path d="M 230 180 L 250 190" stroke="rgba(245,247,250,0.12)" strokeWidth="1.5" strokeLinecap="round" />
-            <path d="M 255 195 L 275 205" stroke="rgba(245,247,250,0.12)" strokeWidth="1.5" strokeLinecap="round" />
-            {/* Vanuatu chain */}
-            <path d="M 330 220 L 340 235 L 345 250" stroke="rgba(245,247,250,0.12)" strokeWidth="1.5" strokeLinecap="round" />
-            {/* Fiji land shapes under the main nodes */}
-            <path d="M 422 238 A 3 2 0 1 1 428 238 Z" fill="rgba(245,247,250,0.2)" />
-            <path d="M 432 233 A 2 1.5 0 1 1 436 233 Z" fill="rgba(245,247,250,0.2)" />
-
-            {/* Ocean Current Flowing Vectors (East to West - Drift Particle Effect) */}
-            {/* Equatorial Current */}
-            <path 
-              d="M 780 140 C 600 130, 400 150, -20 135" 
-              fill="none" 
-              stroke="rgba(76,201,240,0.18)" 
-              strokeWidth="0.8" 
-              strokeDasharray="6 22" 
-              strokeDashoffset="100"
-            >
-              <animate attributeName="strokeDashoffset" values="100;0" dur="8s" repeatCount="indefinite" />
-            </path>
-            {/* South Equatorial Current */}
-            <path 
-              d="M 780 230 C 580 200, 380 240, -20 220" 
-              fill="none" 
-              stroke="rgba(0,180,216,0.18)" 
-              strokeWidth="1.0" 
-              strokeDasharray="8 25" 
-              strokeDashoffset="150"
-            >
-              <animate attributeName="strokeDashoffset" values="150;0" dur="10s" repeatCount="indefinite" />
-            </path>
-            {/* Sub-tropical Drift */}
-            <path 
-              d="M 780 320 C 580 310, 380 330, -20 310" 
-              fill="none" 
-              stroke="rgba(76,201,240,0.15)" 
-              strokeWidth="0.8" 
-              strokeDasharray="5 20" 
-              strokeDashoffset="120"
-            >
-              <animate attributeName="strokeDashoffset" values="120;0" dur="9s" repeatCount="indefinite" />
-            </path>
-          </g>
-
-          {/* Centralized ambient glow */}
-          <circle cx={fijiCoords.cx} cy={fijiCoords.cy} r="260" fill="url(#oceanGlow)" />
-
-          {/* AMBIENT CONCENTRIC RIPPLE WAVES (Emanating from Fiji) */}
-          <circle cx={fijiCoords.cx} cy={fijiCoords.cy} r="20" fill="none" stroke="rgba(0,180,216,0.12)" strokeWidth="0.8">
-            <animate attributeName="r" values="20;180" dur="6s" repeatCount="indefinite" />
-            <animate attributeName="opacity" values="0.8;0" dur="6s" repeatCount="indefinite" />
-          </circle>
-          <circle cx={fijiCoords.cx} cy={fijiCoords.cy} r="20" fill="none" stroke="rgba(0,180,216,0.12)" strokeWidth="0.8">
-            <animate attributeName="r" values="20;180" dur="6s" begin="3s" repeatCount="indefinite" />
-            <animate attributeName="opacity" values="0.8;0" dur="6s" begin="3s" repeatCount="indefinite" />
-          </circle>
-
-          {/* Cartographic Grid Lines */}
-          <line x1="40" y1="120" x2="760" y2="120" stroke="rgba(76,201,240,0.18)" strokeWidth="0.8" strokeDasharray="6 6" />
-          <text x="50" y="112" fill="#4CC9F0" className="font-sans text-[8px] opacity-40 uppercase tracking-widest font-bold">Equator</text>
-          
-          <line x1="40" y1="240" x2="760" y2="240" stroke="rgba(76,201,240,0.06)" strokeWidth="0.6" strokeDasharray="3 3" />
-          <text x="50" y="234" fill="#4CC9F0" className="font-sans text-[7px] opacity-25 uppercase tracking-widest">10° S</text>
-
-          <line x1="40" y1="360" x2="760" y2="360" stroke="rgba(76,201,240,0.06)" strokeWidth="0.6" strokeDasharray="3 3" />
-          <text x="50" y="354" fill="#4CC9F0" className="font-sans text-[7px] opacity-25 uppercase tracking-widest">20° S</text>
-          
-          {/* Longitude meridians */}
-          <line x1="260" y1="30" x2="260" y2="370" stroke="rgba(76,201,240,0.04)" strokeWidth="0.6" strokeDasharray="3 3" />
-          <line x1="430" y1="30" x2="430" y2="370" stroke="rgba(76,201,240,0.04)" strokeWidth="0.6" strokeDasharray="3 3" />
-          <line x1="600" y1="30" x2="600" y2="370" stroke="rgba(76,201,240,0.04)" strokeWidth="0.6" strokeDasharray="3 3" />
-
-          {/* Sci-Fi Radar Observer Sweep */}
-          <line x1="430" y1="240" x2="430" y2="40" stroke="rgba(76,201,240,0.1)" strokeWidth="1.5" className="radar-line" />
-
-          {/* Deep Ocean Trenches */}
-          {/* Tonga Trench */}
-          <path
-            d="M 495 150 Q 505 250, 485 350"
-            fill="none"
-            stroke="rgba(76, 201, 240, 0.25)"
-            strokeWidth="1.2"
-            className="trench-line"
-          />
-          <text x="504" y="280" fill="rgba(76,201,240,0.3)" className="font-sans text-[6px] uppercase tracking-widest rotate-6">Tonga Trench (-10.8 km)</text>
-
-          {/* Mariana Trench */}
-          <path
-            d="M 125 50 Q 155 70, 185 110"
-            fill="none"
-            stroke="rgba(76, 201, 240, 0.25)"
-            strokeWidth="1.2"
-            className="trench-line"
-          />
-          <text x="175" y="80" fill="rgba(76,201,240,0.3)" className="font-sans text-[6px] uppercase tracking-widest rotate-12">Mariana Trench (-11.0 km)</text>
-
-          {/* COMPASS ROSE (Bottom Right Corner) */}
-          <g transform="translate(720, 335)" opacity="0.35" className="pointer-events-none">
-            <circle cx="0" cy="0" r="22" stroke="rgba(76,201,240,0.3)" strokeWidth="0.8" strokeDasharray="2 3" fill="none" />
-            <line x1="0" y1="-28" x2="0" y2="28" stroke="rgba(76,201,240,0.3)" strokeWidth="0.5" />
-            <line x1="-28" y1="0" x2="28" y2="0" stroke="rgba(76,201,240,0.3)" strokeWidth="0.5" />
-            {/* Star Pointer Needles */}
-            <polygon points="0,0 -4,0 0,-24" fill="#4CC9F0" />
-            <polygon points="0,0 4,0 0,24" fill="rgba(76,201,240,0.6)" />
-            <polygon points="0,0 0,-4 24,0" fill="rgba(76,201,240,0.6)" />
-            <polygon points="0,0 0,4 -24,0" fill="rgba(76,201,240,0.6)" />
-            {/* Cardinal Letters */}
-            <text x="0" y="-29" textAnchor="middle" fill="#4CC9F0" className="font-sans text-[7px] font-bold">N</text>
-            <text x="0" y="35" textAnchor="middle" fill="#4CC9F0" className="font-sans text-[6px]">S</text>
-            <text x="31" y="2" textAnchor="start" fill="#4CC9F0" className="font-sans text-[6px]">E</text>
-            <text x="-31" y="2" textAnchor="end" fill="#4CC9F0" className="font-sans text-[6px]">W</text>
-          </g>
+          {/* Static Map Background Paths */}
+          {staticBackground}
 
           {/* Dotted connection paths to Fiji */}
           {mapData.map((island) => {
@@ -502,22 +533,8 @@ export default function PacificMap({
             );
           })}
 
-          {/* RISE INDEX LEGEND SCALE (Top Right Corner) */}
-          <g transform="translate(670, 30)" className="pointer-events-none" opacity="0.85">
-            <rect x="0" y="0" width="105" height="60" rx="6" fill="#030d14" fillOpacity="0.85" stroke="rgba(245,247,250,0.15)" strokeWidth="0.8" />
-            <text x="10" y="16" fill="#4CC9F0" className="font-sans text-[7px] uppercase tracking-widest font-bold">Rise Scale</text>
-            
-            {/* Circle Scale 100mm */}
-            <circle cx="24" cy="38" r="14" fill="none" stroke="rgba(76,201,240,0.4)" strokeWidth="0.8" />
-            {/* Circle Scale 10mm */}
-            <circle cx="24" cy="38" r="7" fill="none" stroke="rgba(76,201,240,0.4)" strokeWidth="0.8" />
-            
-            <line x1="24" y1="24" x2="60" y2="24" stroke="rgba(245,247,250,0.25)" strokeWidth="0.5" strokeDasharray="1.5 1.5" />
-            <text x="64" y="27" fill="rgba(245,247,250,0.7)" className="font-sans text-[6.5px] font-mono">+100 mm</text>
-
-            <line x1="24" y1="31" x2="60" y2="31" stroke="rgba(245,247,250,0.25)" strokeWidth="0.5" strokeDasharray="1.5 1.5" />
-            <text x="64" y="34" fill="rgba(245,247,250,0.7)" className="font-sans text-[6.5px] font-mono">+10 mm</text>
-          </g>
+          {/* Static Map Legend Scale */}
+          {staticLegend}
         </svg>
       </div>
 
