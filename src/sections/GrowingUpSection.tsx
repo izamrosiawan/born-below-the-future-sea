@@ -59,11 +59,14 @@ export default function GrowingUpSection() {
           className="relative w-full h-[480px] rounded-2xl overflow-hidden border border-white/10 shadow-2xl cursor-ew-resize bg-[#030d14] select-none"
         >
           {/* Base Layer: 1993 Parents Environment (Left Side) */}
-          <div className="absolute inset-0 w-full h-full">
+          <div 
+            style={{ clipPath: `polygon(0 0, ${sliderPosition}% 0, ${sliderPosition}% 100%, 0 100%)` }}
+            className="absolute -top-2 -bottom-2 left-0 right-0"
+          >
             <img 
               src="/fiji_beach_1993.png" 
               alt="Fiji Shoreline in 1993"
-              className="w-full h-full object-cover select-none pointer-events-none opacity-90"
+              className="w-full h-full object-cover select-none pointer-events-none"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-[#030d14]/90 via-[#030d14]/40 to-transparent" />
             
@@ -84,12 +87,12 @@ export default function GrowingUpSection() {
           {/* Masked Layer: 2024 Litia Environment (Right Side) */}
           <div 
             style={{ clipPath: `polygon(${sliderPosition}% 0, 100% 0, 100% 100%, ${sliderPosition}% 100%)` }}
-            className="absolute inset-0 w-full h-full"
+            className="absolute -top-2 -bottom-2 left-0 right-0"
           >
             <img 
               src="/fiji_beach_2024.png" 
               alt="Fiji Shoreline in 2024"
-              className="w-full h-full object-cover select-none pointer-events-none opacity-90"
+              className="w-full h-full object-cover select-none pointer-events-none"
             />
             <div className="absolute inset-0 bg-gradient-to-l from-[#030d14]/90 via-[#030d14]/40 to-transparent" />
 

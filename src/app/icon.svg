@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!-- Background Circle (Deep Ocean: #030d14) with a subtle Cyan outer ring -->
+  <circle cx="256" cy="256" r="240" fill="#030d14" stroke="#4CC9F0" stroke-width="8" stroke-opacity="0.3" />
+  
+  <!-- Crescent Moon (White/Sea Foam: #F5F7FA) -->
+  <path d="M350 100 C 350 140, 315 170, 275 170 C 295 170, 320 155, 325 130 C 330 105, 320 85, 305 75 C 330 75, 350 100, 350 100 Z" fill="#F5F7FA" opacity="0.9" />
+  
+  <!-- Deep Wave (Back - Deep Cyan: #00B4D8) -->
+  <path d="M16 330 C 120 280, 160 380, 256 310 C 352 240, 400 350, 496 310 L 496 496 L 16 496 Z" fill="url(#wave-grad-1)" />
+  
+  <!-- Shallow Wave (Front - Soft Cyan: #4CC9F0) -->
+  <path d="M16 360 C 100 320, 140 410, 256 340 C 372 270, 410 370, 496 340 L 496 496 L 16 496 Z" fill="url(#wave-grad-2)" />
+
+  <defs>
+    <linearGradient id="wave-grad-1" x1="256" y1="250" x2="256" y2="496" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00B4D8" stop-opacity="0.8" />
+      <stop offset="1" stop-color="#030d14" />
+    </linearGradient>
+    <linearGradient id="wave-grad-2" x1="256" y1="300" x2="256" y2="496" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4CC9F0" />
+      <stop offset="1" stop-color="#030d14" />
+    </linearGradient>
+  </defs>
+</svg>

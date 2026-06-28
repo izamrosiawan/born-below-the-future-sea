@@ -35,7 +35,7 @@ export default function LitiaSection() {
             <div className="relative w-full h-[85%] rounded-xl overflow-hidden border border-white/5 bg-[#030d14]">
               {/* Ken Burns zoom animation on hover */}
               <img 
-                src="/litia_illustration.png" 
+                src="/litia.png" 
                 alt="Litia standing on the shores of Fiji" 
                 className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-[5000ms] ease-out"
               />
