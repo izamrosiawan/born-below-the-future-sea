@@ -1,4 +1,4 @@
-# Born Below the Future Sea 🌊
+﻿# Born Below the Future Sea 
 
 An immersive, storytelling-driven data visualization project created for the **Pacific DataViz Challenge**. This application explores the historical and future impacts of sea-level rise across low-lying Pacific island nations, framing data within a human-centered, generational narrative.
 
@@ -6,7 +6,7 @@ The story follows **Litia**, a child born in Fiji in 2024, tracing how the ocean
 
 ---
 
-## 🌟 Key Features
+##  Key Features
 
 * **3D Ocean Wave Canvas:** A scroll-driven, customized WebGL/Three.js fragment shader that models wave elevations. The ocean colors dynamically morph to a warm sunset gradient as the user reaches the story's end.
 * **Synthesized Ocean Ambience:** A browser-synthesized audio ambience generator using the **Web Audio API** (modulating Brown Noise using low-pass filters and a 6-second low-frequency oscillator) to mimic realistic coastal wave swells.
@@ -17,7 +17,7 @@ The story follows **Litia**, a child born in Fiji in 2024, tracing how the ocean
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 * **Framework:** Next.js (React 19 & TypeScript)
 * **Styling:** Tailwind CSS v4 & custom HSL color systems
@@ -28,7 +28,7 @@ The story follows **Litia**, a child born in Fiji in 2024, tracing how the ocean
 
 ---
 
-## 📁 Repository Architecture
+##  Repository Architecture
 
 ```text
 src/
@@ -45,7 +45,7 @@ src/
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### 1. Installation
 Install project dependencies:
@@ -66,3 +66,4 @@ Generate an optimized production build:
 npm run build
 ```
 Verify page routes and static assets compilation.
+
