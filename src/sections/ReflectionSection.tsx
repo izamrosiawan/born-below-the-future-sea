@@ -255,7 +255,7 @@ export default function ReflectionSection() {
             Pacific DataViz Challenge: Built for the Future of Oceania
           </p>
           <p className="font-sans text-[11px] text-sea-foam/60 leading-relaxed max-w-md">
-            Developed by <strong className="text-soft-cyan font-semibold">Team Pacific Guardians</strong> as an interactive data visualization platform for global climate advocacy.
+            Developed by <strong className="text-soft-cyan font-semibold">Team Pacific Guardians</strong> (Clai, Izam, Ade) as an interactive data visualization platform for global climate advocacy.
           </p>
         </div>
 

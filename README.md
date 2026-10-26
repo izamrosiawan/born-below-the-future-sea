@@ -1,69 +1,110 @@
-﻿# Born Below the Future Sea 
+# Born Below the Future Sea
 
-An immersive, storytelling-driven data visualization project created for the **Pacific DataViz Challenge**. This application explores the historical and future impacts of sea-level rise across low-lying Pacific island nations, framing data within a human-centered, generational narrative.
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-brightgreen.svg)](https://born-below-the-future-sea.vercel.app/)
+[![Next.js](https://img.shields.io/badge/Next.js-15%20%7C%20App%20Router-black.svg)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19-blue.svg)](https://react.dev/)
+[![Three.js](https://img.shields.io/badge/Three.js-WebGL%20Shaders-black.svg)](https://threejs.org/)
+[![D3.js](https://img.shields.io/badge/D3.js-Interactive%20Viz-orange.svg)](https://d3js.org/)
+[![Challenge](https://img.shields.io/badge/Competition-Pacific%20DataViz%20Challenge-teal.svg)](https://pacificdatavizchallenge.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
-The story follows **Litia**, a child born in Fiji in 2024, tracing how the ocean she grows up with differs from the one her parents inherited in 1993.
+> [!NOTE]
+> **Live Interactive Experience**: Akses visualisasi scrollytelling data iklim dan simulasi kenaikan permukaan laut Pasifik di [https://born-below-the-future-sea.vercel.app/](https://born-below-the-future-sea.vercel.app/)
 
----
+Proyek visualisasi data interaktif naratif (*storytelling-driven scrollytelling*) yang dikembangkan untuk **Pacific DataViz Challenge**. Aplikasi ini mengeksplorasi catatan historis dan proyeksi kenaikan permukaan air laut (*sea-level rise*) di berbagai negara kepulauan Pasifik melalui sudut pandang generasi manusia.
 
-##  Key Features
-
-* **3D Ocean Wave Canvas:** A scroll-driven, customized WebGL/Three.js fragment shader that models wave elevations. The ocean colors dynamically morph to a warm sunset gradient as the user reaches the story's end.
-* **Synthesized Ocean Ambience:** A browser-synthesized audio ambience generator using the **Web Audio API** (modulating Brown Noise using low-pass filters and a 6-second low-frequency oscillator) to mimic realistic coastal wave swells.
-* **Interactive Generation Slider:** A side-by-side coastline comparison tool visualizing a healthy 1993 ecosystem versus a saltwater-inundated 2024 coastline.
-* **Timeline Chronology:** A GSAP-powered, scroll-linked timeline scrubbing satellite altimetry data points from 1993 to 2024.
-* **Frontline Georeference Map:** A stylized, interactive georeferenced map plotting 21 Pacific territories relative to Fiji, showing localized sea-level rise rates proportional to bubble radius.
-* **Gaussian-Smoothed Data Pipeline:** Custom data processor in `parser.ts` executing a Gaussian filter ($\sigma = 1.2$) to eliminate decimal rounding stepping in historical records, generating smooth, high-fidelity lines in D3 charts.
-
----
-
-##  Technology Stack
-
-* **Framework:** Next.js (React 19 & TypeScript)
-* **Styling:** Tailwind CSS v4 & custom HSL color systems
-* **3D Rendering:** Three.js, React Three Fiber (`@react-three/fiber`), and `@react-three/drei`
-* **Data Visualization:** D3.js (interactive line charts, custom gridlines, overlays, and transitions)
-* **Animation & Scrolling:** GSAP (ScrollTrigger) & Lenis (smooth scrolling)
-* **Audio Synthesis:** Web Audio API (client-side brownian noise oscillators)
+Kisah berpusat pada **Litia**, seorang anak yang lahir di Fiji pada tahun 2024, menelusuri bagaimana kondisi samudra tempat ia bertumbuh berbeda secara drastis dibanding samudra yang diwarisi generasi orang tuanya pada tahun 1993.
 
 ---
 
-##  Repository Architecture
+## 1. Anggota Tim Pengembang
+
+Proyek ini dirancang dan dikembangkan secara kolaboratif oleh:
+
+| No | Nama Anggota | Peran & Tanggung Jawab |
+| :---: | :--- | :--- |
+| 1 | **Izam Rosiawan** | Lead Developer, WebGL/Shader Architecture, Data Pipeline & Integration |
+| 2 | **Ade** | Frontend Engineering, Interactive UI/UX Components & Layout Styling |
+| 3 | **Clai** | Narrative Storytelling, Data Research, Asset Design & Curations |
+
+---
+
+## 2. Fitur Utama
+
+* **3D Ocean Wave Canvas**: Fragment shader WebGL/Three.js dinamis berbasis scroll yang memodelkan elevasi gelombang laut secara real-time. Spektrum warna samudra bertransisi secara mulus ke gradien senja (*sunset glow*) ketika narasi mencapai fase akhir.
+* **Synthesized Ocean Ambience**: Generator efek suara deburan ombak pesisir berbasis browser menggunakan Web Audio API (modulasi Brown Noise via low-pass filter dan Low-Frequency Oscillator 6 detik tanpa memerlukan file audio eksternal).
+* **Interactive Generation Slider**: Komponen perbandingan visual interaktif (*before-after slider*) yang memperlihatkan kondisi ekosistem pesisir 1993 berbanding daratan tergenang air laut pada 2024.
+* **Timeline Chronology**: Linimasa scroll-scrubbing ditenagai GSAP ScrollTrigger yang memetakan anomali permukaan laut berbasis data altimetri satelit periode 1993 hingga 2024.
+* **Frontline Georeference Map**: Peta georeferensi interaktif 21 teritori kepulauan Pasifik relatif terhadap Fiji, menampilkan laju kenaikan permukaan air laut lokal yang proporsional dengan radius bubble.
+* **Gaussian-Smoothed Data Pipeline**: Modul pemroses data di `parser.ts` dengan filter Gaussian ($\sigma = 1.2$) untuk mereduksi fluktuasi pembulatan desimal pencatatan satelit, menghasilkan kurva tren yang presisi dan mulus pada grafik D3.
+
+---
+
+## 3. Tech Stack
+
+* **Framework**: Next.js 15 (React 19, TypeScript)
+* **Styling**: Tailwind CSS v4 & custom HSL color tokens
+* **3D & Shader Rendering**: Three.js, React Three Fiber (`@react-three/fiber`), `@react-three/drei`
+* **Data Visualization**: D3.js (interactive line charts, dynamic axes, area curves, and SVG coordinate mapping)
+* **Animation & Motion**: GSAP (ScrollTrigger) & Lenis (smooth virtual scroll)
+* **Audio Synthesis**: Web Audio API (procedural brown noise generation)
+
+---
+
+## 4. Struktur Repositori
 
 ```text
-src/
-├── app/                  # Next.js app routes, layout, and global theme styles
-├── components/           # Reusable UI widgets & map layers
-│   ├── Map/              # Georeferenced Pacific SVG map node layout
-│   └── AudioToggle.tsx   # Audio ambient controls & synthesizers
-├── data/                 # Raw datasets (CSV) and CSV parsing engines
-├── hooks/                # Intersection Observers and custom hooks
-├── sections/             # Linear storytelling scrollytelling pages
-├── three/                # WebGL scenes, shader materials, and canvas setups
-└── visualizations/       # Custom D3.js chart modules
+born-below-the-future-sea/
+├── public/                 # Aset visual statis, tekstur, dan ikon
+├── raw-data/               # Dataset altimetri satelit dan metrik iklim Pasifik
+├── src/
+│   ├── app/                # Next.js App Router (layout, routes, metadata)
+│   ├── components/         # Komponen UI modular, audio toggle, dan peta SVG
+│   │   ├── Map/            # Georeferenced Pacific SVG map node layout
+│   │   └── AudioToggle.tsx # Kontrol audio ambient & web audio synthesizer
+│   ├── data/               # Parser data CSV dan kalkulator agregasi spasial
+│   ├── hooks/              # Custom React hooks & Intersection Observers
+│   ├── sections/           # Modul scrollytelling naratif sekuensial
+│   ├── three/              # Scene Three.js, material shader, dan canvas setup
+│   └── visualizations/     # Modul grafik D3.js interaktif
+├── package.json            # Manifest dependensi & skrip eksekusi
+├── tsconfig.json           # Konfigurasi TypeScript
+└── README.md               # Dokumentasi utama proyek
 ```
 
 ---
 
-##  Getting Started
+## 5. Sumber Data & Metodologi
 
-### 1. Installation
-Install project dependencies:
+* **Data Sumber**: [Pacific Data Hub](https://pacificdata.org) (Satellite Altimetry & Mean Sea Level Datasets).
+* **Cakupan Temporal**: 1993 - 2024 (Data observasi satelit Copernicus Marine Service & NOAA).
+* **Wilayah Kajian**: Kepulauan Pasifik (Fiji, Kiribati, Tuvalu, Marshall Islands, Vanuatu, Samoa, Solomon Islands, dkk.).
+* **Pembersihan Data**: Penanganan *missing values*, interpolasi linier untuk gap pencatatan musiman, serta smoothing berbasis Gaussian filter untuk visualisasi tren makro.
+
+---
+
+## 6. Panduan Menjalankan
+
+### 1. Instalasi Dependensi
+Pastikan [Node.js](https://nodejs.org/) (versi 18 LTS atau lebih baru) sudah terpasang, lalu jalankan:
 ```bash
 npm install
 ```
 
-### 2. Development Server
-Run the development server:
+### 2. Menjalankan Server Pengembangan
 ```bash
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) on your browser to view the application.
+Buka browser pada [http://localhost:3000](http://localhost:3000) untuk melihat aplikasi.
 
-### 3. Production Build
-Generate an optimized production build:
+### 3. Build Produksi
 ```bash
 npm run build
+npm run start
 ```
-Verify page routes and static assets compilation.
 
+---
+
+## 7. Lisensi
+
+Didistribusikan di bawah lisensi MIT.
